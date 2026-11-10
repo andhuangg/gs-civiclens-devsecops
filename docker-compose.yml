@@ -1,0 +1,21 @@
+services:
+  civiclens-app:
+    image: ${IMAGE:-civiclens-lite:local}
+    container_name: civiclens-app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    networks:
+      - devsecops
+
+networks:
+  devsecops:
+    name: devsecops
+    external: true

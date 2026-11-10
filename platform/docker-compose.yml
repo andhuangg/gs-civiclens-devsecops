@@ -1,0 +1,68 @@
+services:
+  jenkins:
+    build: ./jenkins
+    image: civiclens-jenkins:local
+    container_name: jenkins
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    group_add:
+      - "${DOCKER_GID}"
+    environment:
+      JENKINS_ADMIN_PASSWORD: ${JENKINS_ADMIN_PASSWORD}
+      SONAR_TOKEN: ${SONAR_TOKEN}
+      ECR_REGISTRY: ${ECR_REGISTRY}
+      JENKINS_PUBLIC_URL: ${JENKINS_PUBLIC_URL}
+    volumes:
+      - /var/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - devsecops
+
+  sonarqube:
+    image: sonarqube:26.11.0.134175-community
+    container_name: sonarqube
+    restart: unless-stopped
+    depends_on:
+      - sonar-db
+    ports:
+      - "9000:9000"
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://sonar-db:5432/sonar
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: ${SONAR_DB_PASSWORD}
+    ulimits:
+      nofile:
+        soft: 131072
+        hard: 131072
+      nproc: 8192
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    networks:
+      - devsecops
+
+  sonar-db:
+    image: postgres:18.6-alpine3.24
+    container_name: sonar-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: ${SONAR_DB_PASSWORD}
+      POSTGRES_DB: sonar
+    volumes:
+      - sonar_db:/var/lib/postgresql
+    networks:
+      - devsecops
+
+volumes:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  sonar_db:
+
+networks:
+  devsecops:
+    name: devsecops
+    external: true

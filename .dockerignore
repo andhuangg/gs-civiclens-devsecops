@@ -1,0 +1,17 @@
+.git
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.coverage
+coverage.xml
+test-results.xml
+tests
+infra
+jenkins
+docs
+reports
+.scannerwork
+*.md
+Jenkinsfile
+docker-compose.yml

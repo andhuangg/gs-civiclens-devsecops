@@ -1,0 +1,76 @@
+jenkins:
+  systemMessage: "CivicLens Lite | Pipeline DevSecOps | FIAP Global Solution 2026"
+  numExecutors: 2
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          name: "Administrador"
+          password: "${JENKINS_ADMIN_PASSWORD}"
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+  globalNodeProperties:
+    - envVars:
+        env:
+          - key: "ECR_REGISTRY"
+            value: "${ECR_REGISTRY}"
+
+unclassified:
+  location:
+    url: "${JENKINS_PUBLIC_URL}"
+  sonarGlobalConfiguration:
+    buildWrapperEnabled: true
+    installations:
+      - name: "sonarqube"
+        serverUrl: "http://sonarqube:9000"
+        credentialsId: "sonar-token"
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - string:
+              scope: GLOBAL
+              id: "sonar-token"
+              description: "Token de análise do SonarQube"
+              secret: "${SONAR_TOKEN}"
+
+tool:
+  sonarRunnerInstallation:
+    installations:
+      - name: "sonar-scanner"
+        properties:
+          - installSource:
+              installers:
+                - sonarRunnerInstaller:
+                    id: "8.4.0.16527"
+
+jobs:
+  - script: |
+      pipelineJob('civiclens-lite') {
+        description('Pipeline DevSecOps do CivicLens Lite: testes, SonarQube, Trivy, ECR, deploy e validação.')
+        properties {
+          githubProjectUrl('https://github.com/andhuangg/gs-civiclens-devsecops/')
+          pipelineTriggers {
+            triggers {
+              githubPush()
+            }
+          }
+        }
+        definition {
+          cpsScm {
+            scm {
+              git {
+                remote {
+                  url('https://github.com/andhuangg/gs-civiclens-devsecops.git')
+                }
+                branch('*/main')
+              }
+            }
+            scriptPath('Jenkinsfile')
+            lightweight(true)
+          }
+        }
+      }
