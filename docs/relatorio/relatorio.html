@@ -22,7 +22,7 @@
   .ok { color: var(--ok); font-weight: 600; }
   .bad { color: var(--bad); font-weight: 600; }
   figure { margin: 2mm 0 5mm; page-break-inside: avoid; text-align: center; }
-  figure img { max-width: 100%; max-height: 120mm; border: 1px solid var(--line); border-radius: 1.5mm; }
+  figure img { max-width: 100%; max-height: 100mm; border: 1px solid var(--line); border-radius: 1.5mm; }
   figcaption { font-size: 9pt; color: var(--muted); margin-top: 1.5mm; }
   .capa { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; page-break-after: always; }
   .capa .topo { color: var(--muted); font-size: 11pt; letter-spacing: .3px; }
@@ -138,7 +138,9 @@
   <tr><td>Deploy</td><td><code>docker compose up -d</code> com a imagem recém publicada</td><td>falha de subida</td></tr>
   <tr><td>Validação funcional</td><td><code>scripts/smoke-test.sh</code>: health, versão exata, GET, POST (201) e estatísticas</td><td>resposta inesperada</td></tr>
 </table>
-<!--JENKINS_PRINTS-->
+<figure><img src="../evidencias/prints/04-jenkins-job.jpg"><figcaption>Figura 3. Job civiclens-lite no Jenkins: artefatos publicados (relatórios Trivy, cobertura, testes), tendência de testes e histórico de builds.</figcaption></figure>
+<figure><img src="../evidencias/prints/03-jenkins-stage-view.jpg"><figcaption>Figura 4. Stage View com os nove estágios. O build #12 foi bloqueado no Quality Gate e os estágios seguintes não executaram.</figcaption></figure>
+<figure><img src="../evidencias/prints/05-build07-push.jpg"><figcaption>Figura 5. Build iniciado automaticamente pelo webhook do GitHub ("Started by GitHub push by andhuangg"), com o commit que o originou.</figcaption></figure>
 
 <h3>Etapa 3. Qualidade com SonarQube</h3>
 <p>O Jenkins envia código, cobertura (coverage.xml) e resultados de teste (JUnit) ao SonarQube. Foi criado o Quality Gate <b>CivicLens Gate</b>, definido como padrão por script de bootstrap, combinando as condições "Clean as You Code" do SonarQube com condições adicionais sobre o código total:</p>
@@ -150,7 +152,8 @@
   <tr><td>Novos issues</td><td>&gt; 0</td><td>código novo</td></tr>
   <tr><td>Security Hotspots revisados</td><td>&lt; 100%</td><td>código novo</td></tr>
 </table>
-<!--SONAR_PRINTS-->
+<figure><img src="../evidencias/prints/11-sonar-dashboard.jpg"><figcaption>Figura 6. Dashboard do SonarQube: Quality Gate aprovado, 0 issues, ratings A, cobertura 100% e 0% de duplicação.</figcaption></figure>
+<figure><img src="../evidencias/prints/12-sonar-quality-gate-historico.jpg"><figcaption>Figura 7. Histórico do Quality Gate por versão: a versão 12-ee7ec0d reprovou (caso 4 de troubleshooting) e as demais foram aprovadas.</figcaption></figure>
 
 <h3>Etapa 4. Segurança com Trivy</h3>
 <p>Após o build, o Trivy analisa a imagem e gera três relatórios (tabela no log, JSON e HTML publicado no Jenkins), listando HIGH e CRITICAL e um resumo por severidade. Em seguida executa o gate <code>--severity CRITICAL --exit-code 1</code>, que interrompe a pipeline se existir qualquer vulnerabilidade CRITICAL. Nenhum controle foi desabilitado: não há <code>--ignore-unfixed</code>, <code>.trivyignore</code> ou exceções.</p>
@@ -171,12 +174,7 @@ civiclens-app   345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9
 jenkins         civiclens-jenkins:local                                                  Up
 sonarqube       sonarqube:26.11.0.134175-community                                       Up
 sonar-db        postgres:18.6-alpine3.24                                                 Up</pre>
-<pre>Validação funcional (build #14)
-GET /health -> {"status":"ok","service":"civiclens-lite","version":"14-9daf319"}
-OK: versão em execução confere (14-9daf319)
-GET /api/v1/ocorrencias -> 3 ocorrências
-POST /api/v1/ocorrencias -> HTTP 201, protocolo CL-2026-00004
-Validação funcional concluída com sucesso</pre>
+<figure><img src="../evidencias/prints/08-build14-validacao.jpg"><figcaption>Figura 8. Estágio de validação funcional do build #14: health com a versão exata, listagem, criação (HTTP 201) e estatísticas.</figcaption></figure>
 
 <h2 class="pagebreak">5. Resultados SonarQube e Trivy</h2>
 <table>
@@ -197,7 +195,7 @@ Validação funcional concluída com sucesso</pre>
   <tr><td>#7</td><td class="bad">2</td><td>1</td><td>1</td><td>0</td><td class="bad">Bloqueado: python-jose 3.3.0</td></tr>
   <tr><td>#8 a #14</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="ok">Após troca por PyJWT</td></tr>
 </table>
-<!--TRIVY_PRINTS-->
+<figure><img src="../evidencias/prints/10-trivy-relatorio-html-build07.jpg"><figcaption>Figura 9. Relatório HTML do Trivy publicado no Jenkins para o build #7: duas vulnerabilidades CRITICAL no python-jose.</figcaption></figure>
 
 <h2>6. Evidências da pipeline e histórico de execução</h2>
 <table>
@@ -214,7 +212,7 @@ Validação funcional concluída com sucesso</pre>
   <tr><td>#12</td><td>push</td><td class="bad">FAILURE</td><td>51 s</td><td>Bloqueio no Quality Gate (caso 4)</td></tr>
   <tr><td>#13</td><td>push</td><td class="ok">SUCCESS</td><td>68 s</td><td>Correção do caso 4</td></tr>
   <tr><td>#14</td><td>push</td><td class="ok">SUCCESS</td><td>65 s</td><td>Chave JWT movida para variável de ambiente</td></tr>
-  <tr><td>#15 e #16</td><td>push</td><td class="ok">SUCCESS</td><td>64 a 65 s</td><td>Commits de documentação e evidências</td></tr>
+  <tr><td>#15 em diante</td><td>push</td><td class="ok">SUCCESS</td><td>cerca de 65 s</td><td>Commits de documentação, evidências e relatório</td></tr>
 </table>
 <p>Logs completos de cada execução estão em <code>docs/evidencias/logs</code> no repositório.</p>
 
@@ -234,6 +232,7 @@ loopback, wildcard, link-local, site-local, multicast, cloud metadata addresses 
 <p><b>Bloqueio.</b> Build #5 falhou no estágio de testes em 20 segundos; os demais estágios foram pulados.</p>
 <pre>ERROR: Cannot install -r requirements.txt (line 2), h11==0.14.0 and httpx2 because these package versions have conflicting dependencies.
 ERROR: ResolutionImpossible</pre>
+<figure><img src="../evidencias/prints/09-build05-testes-bloqueio.jpg"><figcaption>Figura 10. Build #5 bloqueado no estágio de testes por conflito de dependências.</figcaption></figure>
 <p><b>Análise e correção.</b> O <code>httpx2</code>, usado nos testes, exige <code>h11&gt;=0.16</code>, e o resolvedor do pip recusou a versão vulnerável antes do build da imagem. O pin foi removido e o build #6 foi aprovado.</p>
 
 <h3>Caso 3 (controlado): vulnerabilidade CRITICAL barrada pelo Trivy</h3>
@@ -244,6 +243,7 @@ ecdsa        CVE-2024-23342  HIGH      0.19.2   (sem correção)  python-ecdsa: 
 python-jose  CVE-2024-33663  CRITICAL  3.3.0    3.4.0           python-jose: algorithm confusion with OpenSSH ECDSA keys
 python-jose  CVE-2026-85394  CRITICAL  3.3.0    (sem correção)
 ERROR: script returned exit code 1</pre>
+<figure><img src="../evidencias/prints/06-build07-trivy-bloqueio.jpg"><figcaption>Figura 11. Build #7: estágio Trivy Scan falhou com exit code 1 por causa das CRITICAL; ECR, deploy e validação foram pulados.</figcaption></figure>
 <p><b>Análise.</b> Atualizar para 3.4.0 resolveria apenas uma das CRITICAL; a CVE-2026-85394 e o HIGH do <code>ecdsa</code> (dependência transitiva) não têm correção disponível.</p>
 <p><b>Correção.</b> Substituição da biblioteca por <code>PyJWT 2.15.1</code>, mantida ativamente e sem dependência do <code>ecdsa</code>. Validada com <code>trivy fs</code> antes do commit; build #8 aprovado com 0 vulnerabilidades.</p>
 
@@ -254,10 +254,12 @@ ERROR: script returned exit code 1</pre>
 ERROR: Pipeline aborted due to quality gate failure: ERROR
 Condições reprovadas: security_rating = 4 (D), limite 1 (A) | new_violations = 1, limite 0
 python:S5659 CRITICAL VULNERABILITY app/auth.py:20 "Don't use a JWT token without verifying its signature."</pre>
+<figure><img src="../evidencias/prints/07-build12-quality-gate-bloqueio.jpg"><figcaption>Figura 12. Build #12 abortado pelo Quality Gate. Note a validação do secret HMAC do webhook ("The incoming webhook matched the configured webhook secret").</figcaption></figure>
+<figure><img src="../evidencias/prints/13-sonar-issue-s5659-corrigida.jpg"><figcaption>Figura 13. Vulnerabilidade python:S5659 em app/auth.py, marcada como corrigida (Fixed) pelo SonarQube após o build #13.</figcaption></figure>
 <p><b>Correção.</b> A função passou a reutilizar <code>validar_token</code>, que verifica assinatura e expiração, e foi criado um teste garantindo que um token adulterado é rejeitado. Build #13 aprovado. No build #14 a chave JWT, que estava fixa no código, passou a ser lida de variável de ambiente com tamanho mínimo de 32 caracteres.</p>
 <div class="nota"><b>Aprendizado sobre os limites das ferramentas.</b> Duas tentativas anteriores de reprovar o Quality Gate não funcionaram, e isso também foi analisado: um endpoint sem teste (build #9) não reprovou porque o SonarQube ignora condições de cobertura em mudanças com menos de 20 linhas; uma chave JWT legível escrita no código (build #11) não foi detectada porque a regra de segredos depende de entropia. Ferramentas automatizadas reduzem risco, mas não substituem revisão humana.</div>
 
-<h2 class="pagebreak">8. Conclusão e aprendizados</h2>
+<h2>8. Conclusão e aprendizados</h2>
 <p>A pipeline entrega o fluxo completo exigido, de forma automatizada e reprodutível: cada push no GitHub resulta, em cerca de 1 minuto, em uma imagem testada, analisada, verificada quanto a vulnerabilidades, publicada com versão rastreável até o commit e implantada com validação funcional. Os três tipos de bloqueio (teste, qualidade e segurança) foram comprovados com execuções reais antes e depois da correção.</p>
 <h3>Dificuldades e soluções</h3>
 <ul>
@@ -279,7 +281,6 @@ python:S5659 CRITICAL VULNERABILITY app/auth.py:20 "Don't use a JWT token withou
   <tr><th>Item</th><th>Link</th></tr>
   <tr><td>Repositório GitHub</td><td>https://github.com/andhuangg/gs-civiclens-devsecops</td></tr>
   <tr><td>Publicação no LinkedIn</td><td>LINK_LINKEDIN</td></tr>
-  <tr><td>Vídeo demonstrativo</td><td>LINK_VIDEO</td></tr>
   <tr><td>Projeto de referência (MIT)</td><td>https://github.com/tejasbhor/Civiclens</td></tr>
 </table>
 
