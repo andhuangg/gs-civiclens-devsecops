@@ -88,3 +88,10 @@ def test_estatisticas():
     corpo = resposta.json()
     assert corpo["total"] >= 3
     assert set(corpo["por_status"]) == {"recebida", "em_andamento", "resolvida", "rejeitada"}
+
+
+def test_listar_categorias():
+    resposta = client.get("/api/v1/categorias")
+    assert resposta.status_code == 200
+    valores = {c["valor"] for c in resposta.json()}
+    assert {"vias", "iluminacao", "agua"} <= valores
