@@ -4,6 +4,11 @@ import pytest
 from app.auth import extrair_usuario, gerar_token, validar_token
 
 
+@pytest.fixture(autouse=True)
+def chave_jwt(monkeypatch):
+    monkeypatch.setenv("JWT_SECRET_KEY", "chave-de-teste-com-mais-de-32-caracteres")
+
+
 def test_gerar_e_validar_token():
     token = gerar_token("cidadao@civiclens.local")
     assert validar_token(token) == "cidadao@civiclens.local"
@@ -25,3 +30,9 @@ def test_extrair_usuario_rejeita_token_adulterado():
     cabecalho, payload, _ = token.split(".")
     with pytest.raises(jwt.InvalidSignatureError):
         extrair_usuario(f"{cabecalho}.{payload}.assinatura-falsa")
+
+
+def test_chave_ausente_ou_curta(monkeypatch):
+    monkeypatch.setenv("JWT_SECRET_KEY", "curta")
+    with pytest.raises(RuntimeError):
+        gerar_token("cidadao@civiclens.local")
