@@ -83,11 +83,9 @@ reliability_rating GT 1
 security_rating GT 1
 sqale_rating GT 1
 duplicated_lines_density GT 3
-new_coverage LT 80
-new_violations GT 0
 CONDITIONS
-    curl -fsS -u "$SONAR_AUTH" -X POST "$SONAR_URL/api/qualitygates/set_as_default" --data-urlencode "name=$GATE"
 fi
+curl -fsS -u "$SONAR_AUTH" -X POST "$SONAR_URL/api/qualitygates/set_as_default" --data-urlencode "name=$GATE"
 
 docker compose up -d --build jenkins
 

@@ -71,11 +71,15 @@ O Jenkins acessa o ECR por meio de uma IAM Role da instância (sem access keys e
 
 | Métrica | Condição de reprovação |
 |---|---|
-| Cobertura | menor que 80% |
-| Cobertura em código novo | menor que 80% |
+| Cobertura (código total) | menor que 80% |
 | Reliability, Security e Maintainability rating | pior que A |
-| Linhas duplicadas | maior que 3% |
+| Linhas duplicadas (código total) | maior que 3% |
 | Novos issues | maior que 0 |
+| Cobertura em código novo | menor que 80% |
+| Linhas duplicadas em código novo | maior que 3% |
+| Security Hotspots revisados em código novo | menor que 100% |
+
+As quatro últimas condições são as padrão "Clean as You Code" do SonarQube; as quatro primeiras foram adicionadas para avaliar também o código total.
 
 ## Como executar localmente
 
