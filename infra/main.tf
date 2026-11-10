@@ -201,3 +201,13 @@ resource "aws_eip" "cicd" {
     Name = "civiclens-cicd"
   }
 }
+
+resource "aws_security_group_rule" "jenkins_from_self" {
+  description       = "Webhook do SonarQube para o Jenkins via IP publico"
+  type              = "ingress"
+  from_port         = 8080
+  to_port           = 8080
+  protocol          = "tcp"
+  cidr_blocks       = ["${aws_eip.cicd.public_ip}/32"]
+  security_group_id = aws_security_group.cicd.id
+}

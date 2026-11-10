@@ -31,6 +31,8 @@ ENV
     chmod 600 "$ENV_FILE"
 fi
 
+grep -q '^SONAR_WEBHOOK_SECRET=' "$ENV_FILE" || echo "SONAR_WEBHOOK_SECRET=$(openssl rand -hex 24)" >> "$ENV_FILE"
+
 set -a
 . "./$ENV_FILE"
 set +a
@@ -62,10 +64,19 @@ if [ -z "$SONAR_TOKEN" ]; then
     sed -i "s|^SONAR_TOKEN=.*|SONAR_TOKEN=$SONAR_TOKEN|" "$ENV_FILE"
 fi
 
-if ! curl -fsS -u "$SONAR_AUTH" "$SONAR_URL/api/webhooks/list" | jq -e '.webhooks[] | select(.name=="jenkins")' >/dev/null; then
+WEBHOOK_URL="${JENKINS_PUBLIC_URL}sonarqube-webhook/"
+WEBHOOK_KEY=$(curl -fsS -u "$SONAR_AUTH" "$SONAR_URL/api/webhooks/list" | jq -r '.webhooks[] | select(.name=="jenkins") | .key')
+if [ -z "$WEBHOOK_KEY" ]; then
     curl -fsS -u "$SONAR_AUTH" -X POST "$SONAR_URL/api/webhooks/create" \
         --data-urlencode "name=jenkins" \
-        --data-urlencode "url=http://jenkins:8080/sonarqube-webhook/"
+        --data-urlencode "url=$WEBHOOK_URL" \
+        --data-urlencode "secret=$SONAR_WEBHOOK_SECRET" >/dev/null
+else
+    curl -fsS -u "$SONAR_AUTH" -X POST "$SONAR_URL/api/webhooks/update" \
+        --data-urlencode "webhook=$WEBHOOK_KEY" \
+        --data-urlencode "name=jenkins" \
+        --data-urlencode "url=$WEBHOOK_URL" \
+        --data-urlencode "secret=$SONAR_WEBHOOK_SECRET"
 fi
 
 GATE="CivicLens Gate"

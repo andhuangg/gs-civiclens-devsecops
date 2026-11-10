@@ -26,6 +26,7 @@ unclassified:
       - name: "sonarqube"
         serverUrl: "http://sonarqube:9000"
         credentialsId: "sonar-token"
+        webhookSecretId: "sonar-webhook-secret"
 
 credentials:
   system:
@@ -36,6 +37,11 @@ credentials:
               id: "sonar-token"
               description: "Token de análise do SonarQube"
               secret: "${SONAR_TOKEN}"
+          - string:
+              scope: GLOBAL
+              id: "sonar-webhook-secret"
+              description: "Secret HMAC do webhook SonarQube"
+              secret: "${SONAR_WEBHOOK_SECRET}"
 
 tool:
   sonarRunnerInstallation:
