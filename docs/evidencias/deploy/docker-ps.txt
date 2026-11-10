@@ -1,0 +1,5 @@
+NAMES           IMAGE                                                                    STATUS                    PORTS
+civiclens-app   345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319   Up 38 minutes (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+jenkins         civiclens-jenkins:local                                                  Up About an hour          0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp, 50000/tcp
+sonarqube       sonarqube:26.11.0.134175-community                                       Up About an hour          0.0.0.0:9000->9000/tcp, [::]:9000->9000/tcp
+sonar-db        postgres:18.6-alpine3.24                                                 Up About an hour          5432/tcp

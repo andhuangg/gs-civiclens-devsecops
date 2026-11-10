@@ -1,0 +1,326 @@
+Started by GitHub push by andhuangg
+Obtained Jenkinsfile from git https://github.com/andhuangg/gs-civiclens-devsecops.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/civiclens-lite
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/civiclens-lite/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/andhuangg/gs-civiclens-devsecops.git # timeout=10
+Fetching upstream changes from https://github.com/andhuangg/gs-civiclens-devsecops.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/andhuangg/gs-civiclens-devsecops.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision ee7ec0d7d7f43a915822a9be794eedc49928c20c (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f ee7ec0d7d7f43a915822a9be794eedc49928c20c # timeout=10
+Commit message: "Adiciona extração do usuário do token para auditoria"
+ > git rev-list --no-walk b01d9d80db22dd5a220a305137cfb70bd47133f6 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] timeout
+[2026-11-10T01:15:35.754Z] Timeout set to expire in 30 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+[2026-11-10T01:15:35.881Z] Selected Git installation does not exist. Using Default
+[2026-11-10T01:15:35.881Z] The recommended git tool is: NONE
+[2026-11-10T01:15:35.881Z] No credentials specified
+[2026-11-10T01:15:35.882Z]  > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/civiclens-lite/.git # timeout=10
+[2026-11-10T01:15:35.892Z] Fetching changes from the remote Git repository
+[2026-11-10T01:15:35.896Z]  > git config remote.origin.url https://github.com/andhuangg/gs-civiclens-devsecops.git # timeout=10
+[2026-11-10T01:15:35.906Z] Fetching upstream changes from https://github.com/andhuangg/gs-civiclens-devsecops.git
+[2026-11-10T01:15:35.906Z]  > git --version # timeout=10
+[2026-11-10T01:15:35.915Z]  > git --version # 'git version 2.47.3'
+[2026-11-10T01:15:35.915Z]  > git fetch --tags --force --progress -- https://github.com/andhuangg/gs-civiclens-devsecops.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+[2026-11-10T01:15:36.066Z]  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+[2026-11-10T01:15:36.070Z] Checking out Revision ee7ec0d7d7f43a915822a9be794eedc49928c20c (refs/remotes/origin/main)
+[2026-11-10T01:15:36.070Z]  > git config core.sparsecheckout # timeout=10
+[2026-11-10T01:15:36.074Z]  > git checkout -f ee7ec0d7d7f43a915822a9be794eedc49928c20c # timeout=10
+[2026-11-10T01:15:36.080Z] Commit message: "Adiciona extração do usuário do token para auditoria"
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
+[2026-11-10T01:15:36.409Z] + git rev-parse --short=7 HEAD
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] sh
+[2026-11-10T01:15:36.798Z] + git log -1 --pretty=Commit: %h | Autor: %an | Mensagem: %s
+[2026-11-10T01:15:36.798Z] Commit: ee7ec0d | Autor: andhuangg | Mensagem: Adiciona extração do usuário do token para auditoria
+[Pipeline] sh
+[2026-11-10T01:15:37.078Z] + mkdir -p reports
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Testes automatizados)
+[Pipeline] sh
+[2026-11-10T01:15:37.448Z] + id -u
+[2026-11-10T01:15:37.448Z] + id -g
+[2026-11-10T01:15:37.449Z] + docker run --rm -u 1000:1000 -e HOME=/tmp -v /var/jenkins_home/workspace/civiclens-lite:/var/jenkins_home/workspace/civiclens-lite -w /var/jenkins_home/workspace/civiclens-lite python:3.14.10-alpine3.24 sh -c python -m venv /tmp/venv && /tmp/venv/bin/pip install -q -r requirements-dev.txt && /tmp/venv/bin/pytest
+[2026-11-10T01:16:03.854Z] 
+[2026-11-10T01:16:03.854Z] [notice] A new release of pip is available: 26.2.2 -> 26.3
+[2026-11-10T01:16:03.854Z] [notice] To update, run: /tmp/venv/bin/python -m pip install --upgrade pip
+[2026-11-10T01:16:03.854Z] ============================= test session starts ==============================
+[2026-11-10T01:16:03.854Z] platform linux -- Python 3.14.10, pytest-9.2.0, pluggy-1.7.0 -- /tmp/venv/bin/python
+[2026-11-10T01:16:03.854Z] cachedir: .pytest_cache
+[2026-11-10T01:16:03.854Z] rootdir: /var/jenkins_home/workspace/civiclens-lite
+[2026-11-10T01:16:03.854Z] configfile: pytest.ini
+[2026-11-10T01:16:03.854Z] testpaths: tests
+[2026-11-10T01:16:03.854Z] plugins: anyio-4.16.0, cov-7.1.0
+[2026-11-10T01:16:03.854Z] collecting ... collected 13 items
+[2026-11-10T01:16:03.854Z] 
+[2026-11-10T01:16:03.854Z] tests/test_api.py::test_health PASSED                                    [  7%]
+[2026-11-10T01:16:03.854Z] tests/test_api.py::test_listar_ocorrencias_retorna_exemplos PASSED       [ 15%]
+[2026-11-10T01:16:03.854Z] tests/test_api.py::test_filtrar_por_categoria PASSED                     [ 23%]
+[2026-11-10T01:16:03.854Z] tests/test_api.py::test_criar_e_obter_ocorrencia PASSED                  [ 30%]
+[2026-11-10T01:16:03.854Z] tests/test_api.py::test_criar_ocorrencia_invalida PASSED                 [ 38%]
+[2026-11-10T01:16:03.854Z] tests/test_api.py::test_ocorrencia_inexistente PASSED                    [ 46%]
+[2026-11-10T01:16:03.854Z] tests/test_api.py::test_fluxo_de_status PASSED                           [ 53%]
+[2026-11-10T01:16:03.854Z] tests/test_api.py::test_transicao_invalida PASSED                        [ 61%]
+[2026-11-10T01:16:03.854Z] tests/test_api.py::test_estatisticas PASSED                              [ 69%]
+[2026-11-10T01:16:03.854Z] tests/test_api.py::test_listar_categorias PASSED                         [ 76%]
+[2026-11-10T01:16:03.854Z] tests/test_auth.py::test_gerar_e_validar_token PASSED                    [ 84%]
+[2026-11-10T01:16:03.854Z] tests/test_auth.py::test_token_expirado PASSED                           [ 92%]
+[2026-11-10T01:16:03.854Z] tests/test_auth.py::test_extrair_usuario PASSED                          [100%]
+[2026-11-10T01:16:03.854Z] 
+[2026-11-10T01:16:03.854Z] =============================== warnings summary ===============================
+[2026-11-10T01:16:03.854Z] tests/test_auth.py::test_gerar_e_validar_token
+[2026-11-10T01:16:03.854Z] tests/test_auth.py::test_token_expirado
+[2026-11-10T01:16:03.854Z] tests/test_auth.py::test_extrair_usuario
+[2026-11-10T01:16:03.854Z]   /tmp/venv/lib/python3.14/site-packages/jwt/api_jwt.py:149: InsecureKeyLengthWarning: The HMAC key is 29 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+[2026-11-10T01:16:03.854Z]     return self._jws.encode(
+[2026-11-10T01:16:03.854Z] 
+[2026-11-10T01:16:03.854Z] tests/test_auth.py::test_gerar_e_validar_token
+[2026-11-10T01:16:03.854Z] tests/test_auth.py::test_token_expirado
+[2026-11-10T01:16:03.854Z]   /tmp/venv/lib/python3.14/site-packages/jwt/api_jwt.py:370: InsecureKeyLengthWarning: The HMAC key is 29 bytes long, which is below the minimum recommended length of 32 bytes for SHA256. See RFC 7518 Section 3.2.
+[2026-11-10T01:16:03.854Z]     decoded = self.decode_complete(
+[2026-11-10T01:16:03.854Z] 
+[2026-11-10T01:16:03.854Z] -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+[2026-11-10T01:16:03.854Z] - generated xml file: /var/jenkins_home/workspace/civiclens-lite/test-results.xml -
+[2026-11-10T01:16:03.854Z] ================================ tests coverage ================================
+[2026-11-10T01:16:03.854Z] _______________ coverage: platform linux, python 3.14.10-final-0 _______________
+[2026-11-10T01:16:03.854Z] 
+[2026-11-10T01:16:03.854Z] Name                Stmts   Miss  Cover   Missing
+[2026-11-10T01:16:03.854Z] -------------------------------------------------
+[2026-11-10T01:16:03.854Z] app/__init__.py         2      0   100%
+[2026-11-10T01:16:03.854Z] app/auth.py            12      0   100%
+[2026-11-10T01:16:03.854Z] app/main.py            36      0   100%
+[2026-11-10T01:16:03.854Z] app/models.py          35      0   100%
+[2026-11-10T01:16:03.854Z] app/repository.py      46      0   100%
+[2026-11-10T01:16:03.854Z] -------------------------------------------------
+[2026-11-10T01:16:03.854Z] TOTAL                 131      0   100%
+[2026-11-10T01:16:03.854Z] Coverage XML written to file coverage.xml
+[2026-11-10T01:16:03.854Z] ======================== 13 passed, 5 warnings in 0.90s ========================
+Post stage
+[Pipeline] junit
+[2026-11-10T01:16:03.877Z] Recording test results
+[2026-11-10T01:16:03.885Z] [Checks API] No suitable checks publisher found.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Análise SonarQube)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] tool
+[Pipeline] withSonarQubeEnv
+[2026-11-10T01:16:04.026Z] Injecting SonarQube environment variables using the configuration: sonarqube
+[Pipeline] {
+[Pipeline] sh
+[2026-11-10T01:16:04.322Z] + /var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonar-scanner/bin/sonar-scanner -Dsonar.projectVersion=12-ee7ec0d
+[2026-11-10T01:16:04.873Z] 01:16:04.666 INFO  Scanner configuration file: /var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonar-scanner/conf/sonar-scanner.properties
+[2026-11-10T01:16:04.873Z] 01:16:04.672 INFO  Project root configuration file: /var/jenkins_home/workspace/civiclens-lite/sonar-project.properties
+[2026-11-10T01:16:04.873Z] 01:16:04.706 INFO  SonarScanner CLI 8.4.0.16527
+[2026-11-10T01:16:04.873Z] 01:16:04.713 INFO  Linux 7.0.0-1014-aws amd64
+[2026-11-10T01:16:10.072Z] 01:16:09.007 INFO  Communicating with SonarQube Community Build 26.11.0.134175
+[2026-11-10T01:16:10.072Z] 01:16:09.008 INFO  JRE provisioning: os[linux], arch[x86_64]
+[2026-11-10T01:16:10.072Z] 01:16:09.612 INFO  Starting SonarScanner Engine...
+[2026-11-10T01:16:10.072Z] 01:16:09.613 INFO  Java 21.0.13 Eclipse Adoptium (64-bit)
+[2026-11-10T01:16:14.200Z] 01:16:13.980 INFO  Load global settings
+[2026-11-10T01:16:14.200Z] 01:16:14.142 INFO  Load global settings (done) | time=162ms
+[2026-11-10T01:16:14.200Z] 01:16:14.147 INFO  Server id: 303924D4-AaHC4LObzNMmTtcSQIW4
+[2026-11-10T01:16:14.200Z] 01:16:14.153 INFO  Found an active CI vendor: 'Jenkins'
+[2026-11-10T01:16:14.752Z] 01:16:14.629 INFO  Loading required plugins
+[2026-11-10T01:16:14.752Z] 01:16:14.633 INFO  Load plugins index
+[2026-11-10T01:16:14.752Z] 01:16:14.672 INFO  Load plugins index (done) | time=36ms
+[2026-11-10T01:16:14.752Z] 01:16:14.672 INFO  Load/download plugins
+[2026-11-10T01:16:14.752Z] 01:16:14.693 INFO  Load/download plugins (done) | time=20ms
+[2026-11-10T01:16:15.671Z] 01:16:15.454 INFO  Load project settings for component key: 'civiclens-lite'
+[2026-11-10T01:16:15.671Z] 01:16:15.487 INFO  Load project settings for component key: 'civiclens-lite' (done) | time=31ms
+[2026-11-10T01:16:15.671Z] 01:16:15.516 INFO  Process project properties
+[2026-11-10T01:16:15.671Z] 01:16:15.537 INFO  Process project properties (done) | time=21ms
+[2026-11-10T01:16:15.671Z] 01:16:15.554 INFO  Project key: civiclens-lite
+[2026-11-10T01:16:15.671Z] 01:16:15.558 INFO  Base dir: /var/jenkins_home/workspace/civiclens-lite
+[2026-11-10T01:16:15.671Z] 01:16:15.558 INFO  Working dir: /var/jenkins_home/workspace/civiclens-lite/.scannerwork
+[2026-11-10T01:16:15.922Z] 01:16:15.687 INFO  Load quality profiles
+[2026-11-10T01:16:15.922Z] 01:16:15.764 INFO  Load quality profiles (done) | time=77ms
+[2026-11-10T01:16:15.922Z] 01:16:15.803 INFO  Load active rules
+[2026-11-10T01:16:16.173Z] 01:16:16.148 INFO  Load active rules (done) | time=344ms
+[2026-11-10T01:16:16.173Z] 01:16:16.157 INFO  Load analysis cache
+[2026-11-10T01:16:16.424Z] 01:16:16.222 INFO  Load analysis cache | time=64ms
+[2026-11-10T01:16:16.424Z] 01:16:16.381 INFO  Preprocessing files...
+[2026-11-10T01:16:16.676Z] 01:16:16.485 INFO  1 language detected in 8 preprocessed files (done) | time=103ms
+[2026-11-10T01:16:16.676Z] 01:16:16.486 INFO  8 files ignored because of scm ignore settings
+[2026-11-10T01:16:16.676Z] 01:16:16.488 INFO  Loading plugins for detected languages
+[2026-11-10T01:16:16.676Z] 01:16:16.489 INFO  Load/download plugins
+[2026-11-10T01:16:16.676Z] 01:16:16.509 INFO  Load/download plugins (done) | time=19ms
+[2026-11-10T01:16:16.926Z] 01:16:16.781 INFO  Load project repositories
+[2026-11-10T01:16:17.177Z] 01:16:16.983 INFO  Load project repositories (done) | time=201ms
+[2026-11-10T01:16:17.177Z] 01:16:17.032 INFO  Indexing files...
+[2026-11-10T01:16:17.177Z] 01:16:17.033 INFO  Project configuration:
+[2026-11-10T01:16:17.177Z] 01:16:17.051 INFO  8 files indexed (done) | time=16ms
+[2026-11-10T01:16:17.177Z] 01:16:17.054 INFO  Quality profile for py: Sonar way core
+[2026-11-10T01:16:17.177Z] 01:16:17.054 INFO  ------------- Run sensors on module CivicLens Lite
+[2026-11-10T01:16:17.177Z] 01:16:17.133 INFO  Load metrics repository
+[2026-11-10T01:16:17.427Z] 01:16:17.185 INFO  Load metrics repository (done) | time=45ms
+[2026-11-10T01:16:18.339Z] 01:16:18.128 INFO  Sensor IaC YAML File Type Classification Sensor [iac]
+[2026-11-10T01:16:18.340Z] 01:16:18.135 INFO  Sensor IaC YAML File Type Classification Sensor [iac] (done) | time=8ms
+[2026-11-10T01:16:18.340Z] 01:16:18.137 INFO  Sensor IaC hadolint report Sensor [iac]
+[2026-11-10T01:16:18.340Z] 01:16:18.138 INFO  Sensor IaC hadolint report Sensor [iac] (done) | time=0ms
+[2026-11-10T01:16:18.340Z] 01:16:18.138 INFO  Sensor Java Config Sensor [iac]
+[2026-11-10T01:16:18.340Z] 01:16:18.139 INFO  There are no files to be analyzed for the Java language
+[2026-11-10T01:16:18.340Z] 01:16:18.143 INFO  Sensor Java Config Sensor [iac] (done) | time=1ms
+[2026-11-10T01:16:18.340Z] 01:16:18.144 INFO  Sensor IaC Docker Sensor [iac]
+[2026-11-10T01:16:18.340Z] 01:16:18.146 INFO  There are no files to be analyzed for the Docker language
+[2026-11-10T01:16:18.340Z] 01:16:18.146 INFO  Sensor IaC Docker Sensor [iac] (done) | time=5ms
+[2026-11-10T01:16:18.340Z] 01:16:18.147 INFO  Sensor Python Sensor [python]
+[2026-11-10T01:16:18.891Z] 01:16:18.770 INFO  Starting global symbols computation
+[2026-11-10T01:16:18.891Z] 01:16:18.788 INFO  8 source files to be analyzed
+[2026-11-10T01:16:20.252Z] 01:16:20.055 INFO  8/8 source files have been analyzed
+[2026-11-10T01:16:20.253Z] 01:16:20.059 INFO  Finished step global symbols computation in 1280ms
+[2026-11-10T01:16:20.253Z] 01:16:20.122 INFO  Starting rules execution
+[2026-11-10T01:16:20.253Z] 01:16:20.125 INFO  8 source files to be analyzed
+[2026-11-10T01:16:21.598Z] 01:16:21.464 INFO  8/8 source files have been analyzed
+[2026-11-10T01:16:21.598Z] 01:16:21.465 INFO  Finished step rules execution in 1339ms
+[2026-11-10T01:16:21.598Z] 01:16:21.465 INFO  The Python analyzer was able to leverage cached data from previous analyses for 0 out of 8 files. These files were not parsed.
+[2026-11-10T01:16:21.598Z] 01:16:21.470 INFO  Sensor Python Sensor [python] (done) | time=3324ms
+[2026-11-10T01:16:21.598Z] 01:16:21.474 INFO  Sensor Cobertura Sensor for Python coverage [python]
+[2026-11-10T01:16:21.598Z] 01:16:21.497 INFO  Python test coverage
+[2026-11-10T01:16:21.598Z] 01:16:21.501 INFO  Parsing report '/var/jenkins_home/workspace/civiclens-lite/coverage.xml'
+[2026-11-10T01:16:21.598Z] 01:16:21.595 INFO  Sensor Cobertura Sensor for Python coverage [python] (done) | time=125ms
+[2026-11-10T01:16:21.598Z] 01:16:21.597 INFO  Sensor PythonXUnitSensor [python]
+[2026-11-10T01:16:21.848Z] 01:16:21.623 INFO  Processing report '/var/jenkins_home/workspace/civiclens-lite/test-results.xml'
+[2026-11-10T01:16:21.848Z] 01:16:21.629 INFO  Sensor PythonXUnitSensor [python] (done) | time=33ms
+[2026-11-10T01:16:21.848Z] 01:16:21.631 INFO  Sensor Python Dependency Sensor [python]
+[2026-11-10T01:16:21.848Z] 01:16:21.635 INFO  Sensor Python Dependency Sensor [python] (done) | time=4ms
+[2026-11-10T01:16:21.848Z] 01:16:21.637 INFO  Sensor TextAndSecretsSensor [text]
+[2026-11-10T01:16:21.848Z] 01:16:21.661 INFO  Available processors: 2
+[2026-11-10T01:16:21.848Z] 01:16:21.663 INFO  Using 2 threads for analysis.
+[2026-11-10T01:16:22.399Z] 01:16:22.358 INFO  Start fetching files for the text and secrets analysis
+[2026-11-10T01:16:22.399Z] 01:16:22.367 INFO  Using Git CLI to retrieve dirty files
+[2026-11-10T01:16:22.399Z] 01:16:22.374 INFO  Retrieving language associated files and files included via "sonar.text.inclusions" that are tracked by git
+[2026-11-10T01:16:22.399Z] 01:16:22.375 INFO  Starting the text and secrets analysis
+[2026-11-10T01:16:22.399Z] 01:16:22.377 INFO  8 source files to be analyzed for the text and secrets analysis
+[2026-11-10T01:16:22.651Z] 01:16:22.401 INFO  8/8 source files have been analyzed for the text and secrets analysis
+[2026-11-10T01:16:22.651Z] 01:16:22.403 INFO  Sensor TextAndSecretsSensor [text] (done) | time=764ms
+[2026-11-10T01:16:22.651Z] 01:16:22.404 INFO  ------------- Run sensors on project
+[2026-11-10T01:16:22.651Z] 01:16:22.595 INFO  Sensor IaC Project Sensor [iac]
+[2026-11-10T01:16:22.651Z] 01:16:22.599 INFO  Sensor IaC Project Sensor [iac] (done) | time=1ms
+[2026-11-10T01:16:22.651Z] 01:16:22.602 INFO  Sensor Zero Coverage Sensor
+[2026-11-10T01:16:22.651Z] 01:16:22.602 INFO  Sensor Zero Coverage Sensor (done) | time=0ms
+[2026-11-10T01:16:22.651Z] 01:16:22.607 INFO  ------------- Gather SCA dependencies on project
+[2026-11-10T01:16:22.651Z] 01:16:22.608 INFO  Dependency analysis skipped
+[2026-11-10T01:16:22.651Z] 01:16:22.613 INFO  SCM Publisher SCM provider for this project is: git
+[2026-11-10T01:16:22.651Z] 01:16:22.613 INFO  SCM Publisher 2 source files to be analyzed
+[2026-11-10T01:16:22.904Z] 01:16:22.767 INFO  SCM Publisher 2/2 source files have been analyzed (done) | time=155ms
+[2026-11-10T01:16:22.904Z] 01:16:22.774 INFO  CPD Executor 1 file had no CPD blocks
+[2026-11-10T01:16:22.904Z] 01:16:22.776 INFO  CPD Executor Calculating CPD for 4 files
+[2026-11-10T01:16:22.904Z] 01:16:22.786 INFO  CPD Executor CPD calculation finished (done) | time=12ms
+[2026-11-10T01:16:22.904Z] 01:16:22.794 INFO  SCM revision ID 'ee7ec0d7d7f43a915822a9be794eedc49928c20c'
+[2026-11-10T01:16:23.154Z] 01:16:22.964 INFO  Analysis report generated in 164ms, dir size=184.2 kB
+[2026-11-10T01:16:23.154Z] 01:16:23.015 INFO  Analysis report compressed in 50ms, zip size=46.8 kB
+[2026-11-10T01:16:23.154Z] 01:16:23.047 INFO  Analysis report uploaded in 31ms
+[2026-11-10T01:16:23.154Z] 01:16:23.049 INFO  ANALYSIS SUCCESSFUL, you can find the results at: http://sonarqube:9000/dashboard?id=civiclens-lite
+[2026-11-10T01:16:23.154Z] 01:16:23.049 INFO  Note that you will be able to access the updated dashboard once the server has processed the submitted analysis report
+[2026-11-10T01:16:23.154Z] 01:16:23.050 INFO  More about the report processing at http://sonarqube:9000/api/ce/task?id=61b346c7-2164-4307-82e5-fb06d42638c8
+[2026-11-10T01:16:23.154Z] 01:16:23.069 INFO  Analysis total time: 13.388 s
+[2026-11-10T01:16:23.154Z] 01:16:23.131 INFO  SonarScanner Engine completed successfully
+[2026-11-10T01:16:23.406Z] 01:16:23.191 INFO  EXECUTION SUCCESS
+[2026-11-10T01:16:23.406Z] 01:16:23.192 INFO  Total time: 18.590s
+[Pipeline] }
+[Pipeline] // withSonarQubeEnv
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Quality Gate)
+[Pipeline] timeout
+[2026-11-10T01:16:23.799Z] Timeout set to expire in 5 min 0 sec
+[Pipeline] {
+[Pipeline] waitForQualityGate
+[2026-11-10T01:16:23.845Z] Checking status of SonarQube task '61b346c7-2164-4307-82e5-fb06d42638c8' on server 'sonarqube'
+[2026-11-10T01:16:23.863Z] SonarQube task '61b346c7-2164-4307-82e5-fb06d42638c8' status is 'IN_PROGRESS'
+[2026-11-10T01:16:25.183Z] The incoming webhook matched the configured webhook secret
+[2026-11-10T01:16:25.183Z] SonarQube task '61b346c7-2164-4307-82e5-fb06d42638c8' status is 'SUCCESS'
+[2026-11-10T01:16:25.183Z] SonarQube task '61b346c7-2164-4307-82e5-fb06d42638c8' completed. Quality gate is 'ERROR'
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker Build)
+Stage "Docker Build" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Trivy Scan)
+Stage "Trivy Scan" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Publicação no ECR)
+Stage "Publicação no ECR" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy (Docker Compose))
+Stage "Deploy (Docker Compose)" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Validação funcional)
+Stage "Validação funcional" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] archiveArtifacts
+[2026-11-10T01:16:25.864Z] Archiving artifacts
+[Pipeline] sh
+[2026-11-10T01:16:26.144Z] + docker image prune -f
+[Pipeline] echo
+[2026-11-10T01:16:26.166Z] Pipeline bloqueada. Verifique o estágio que falhou nos logs acima.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: Pipeline aborted due to quality gate failure: ERROR
+Finished: FAILURE

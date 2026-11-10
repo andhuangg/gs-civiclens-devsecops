@@ -1,0 +1,584 @@
+Started by GitHub push by andhuangg
+Obtained Jenkinsfile from git https://github.com/andhuangg/gs-civiclens-devsecops.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/civiclens-lite
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/civiclens-lite/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/andhuangg/gs-civiclens-devsecops.git # timeout=10
+Fetching upstream changes from https://github.com/andhuangg/gs-civiclens-devsecops.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/andhuangg/gs-civiclens-devsecops.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 9daf319142bc41fe54c7f37b5645c29098cc546d (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 9daf319142bc41fe54c7f37b5645c29098cc546d # timeout=10
+Commit message: "Lê chave JWT de variável de ambiente com tamanho mínimo"
+ > git rev-list --no-walk 1b7887ea6843cbc6c273e4cbb897ef5dfb70204d # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] timeout
+[2026-11-10T01:18:35.582Z] Timeout set to expire in 30 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+[2026-11-10T01:18:35.642Z] Selected Git installation does not exist. Using Default
+[2026-11-10T01:18:35.642Z] The recommended git tool is: NONE
+[2026-11-10T01:18:35.642Z] No credentials specified
+[2026-11-10T01:18:35.642Z]  > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/civiclens-lite/.git # timeout=10
+[2026-11-10T01:18:35.648Z] Fetching changes from the remote Git repository
+[2026-11-10T01:18:35.649Z]  > git config remote.origin.url https://github.com/andhuangg/gs-civiclens-devsecops.git # timeout=10
+[2026-11-10T01:18:35.653Z] Fetching upstream changes from https://github.com/andhuangg/gs-civiclens-devsecops.git
+[2026-11-10T01:18:35.653Z]  > git --version # timeout=10
+[2026-11-10T01:18:35.657Z]  > git --version # 'git version 2.47.3'
+[2026-11-10T01:18:35.657Z]  > git fetch --tags --force --progress -- https://github.com/andhuangg/gs-civiclens-devsecops.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+[2026-11-10T01:18:35.782Z]  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+[2026-11-10T01:18:35.787Z] Checking out Revision 9daf319142bc41fe54c7f37b5645c29098cc546d (refs/remotes/origin/main)
+[2026-11-10T01:18:35.787Z]  > git config core.sparsecheckout # timeout=10
+[2026-11-10T01:18:35.790Z]  > git checkout -f 9daf319142bc41fe54c7f37b5645c29098cc546d # timeout=10
+[2026-11-10T01:18:35.796Z] Commit message: "Lê chave JWT de variável de ambiente com tamanho mínimo"
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
+[2026-11-10T01:18:36.117Z] + git rev-parse --short=7 HEAD
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] sh
+[2026-11-10T01:18:36.468Z] + git log -1 --pretty=Commit: %h | Autor: %an | Mensagem: %s
+[2026-11-10T01:18:36.468Z] Commit: 9daf319 | Autor: andhuangg | Mensagem: Lê chave JWT de variável de ambiente com tamanho mínimo
+[Pipeline] sh
+[2026-11-10T01:18:36.737Z] + mkdir -p reports
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Testes automatizados)
+[Pipeline] sh
+[2026-11-10T01:18:37.074Z] + id -u
+[2026-11-10T01:18:37.074Z] + id -g
+[2026-11-10T01:18:37.074Z] + docker run --rm -u 1000:1000 -e HOME=/tmp -v /var/jenkins_home/workspace/civiclens-lite:/var/jenkins_home/workspace/civiclens-lite -w /var/jenkins_home/workspace/civiclens-lite python:3.14.10-alpine3.24 sh -c python -m venv /tmp/venv && /tmp/venv/bin/pip install -q -r requirements-dev.txt && /tmp/venv/bin/pytest
+[2026-11-10T01:19:03.486Z] 
+[2026-11-10T01:19:03.486Z] [notice] A new release of pip is available: 26.2.2 -> 26.3
+[2026-11-10T01:19:03.486Z] [notice] To update, run: /tmp/venv/bin/python -m pip install --upgrade pip
+[2026-11-10T01:19:03.486Z] ============================= test session starts ==============================
+[2026-11-10T01:19:03.486Z] platform linux -- Python 3.14.10, pytest-9.2.0, pluggy-1.7.0 -- /tmp/venv/bin/python
+[2026-11-10T01:19:03.486Z] cachedir: .pytest_cache
+[2026-11-10T01:19:03.486Z] rootdir: /var/jenkins_home/workspace/civiclens-lite
+[2026-11-10T01:19:03.486Z] configfile: pytest.ini
+[2026-11-10T01:19:03.486Z] testpaths: tests
+[2026-11-10T01:19:03.486Z] plugins: anyio-4.16.0, cov-7.1.0
+[2026-11-10T01:19:03.486Z] collecting ... collected 15 items
+[2026-11-10T01:19:03.486Z] 
+[2026-11-10T01:19:03.486Z] tests/test_api.py::test_health PASSED                                    [  6%]
+[2026-11-10T01:19:03.486Z] tests/test_api.py::test_listar_ocorrencias_retorna_exemplos PASSED       [ 13%]
+[2026-11-10T01:19:03.486Z] tests/test_api.py::test_filtrar_por_categoria PASSED                     [ 20%]
+[2026-11-10T01:19:03.486Z] tests/test_api.py::test_criar_e_obter_ocorrencia PASSED                  [ 26%]
+[2026-11-10T01:19:03.486Z] tests/test_api.py::test_criar_ocorrencia_invalida PASSED                 [ 33%]
+[2026-11-10T01:19:03.486Z] tests/test_api.py::test_ocorrencia_inexistente PASSED                    [ 40%]
+[2026-11-10T01:19:03.486Z] tests/test_api.py::test_fluxo_de_status PASSED                           [ 46%]
+[2026-11-10T01:19:03.486Z] tests/test_api.py::test_transicao_invalida PASSED                        [ 53%]
+[2026-11-10T01:19:03.486Z] tests/test_api.py::test_estatisticas PASSED                              [ 60%]
+[2026-11-10T01:19:03.486Z] tests/test_api.py::test_listar_categorias PASSED                         [ 66%]
+[2026-11-10T01:19:03.486Z] tests/test_auth.py::test_gerar_e_validar_token PASSED                    [ 73%]
+[2026-11-10T01:19:03.486Z] tests/test_auth.py::test_token_expirado PASSED                           [ 80%]
+[2026-11-10T01:19:03.486Z] tests/test_auth.py::test_extrair_usuario PASSED                          [ 86%]
+[2026-11-10T01:19:03.486Z] tests/test_auth.py::test_extrair_usuario_rejeita_token_adulterado PASSED [ 93%]
+[2026-11-10T01:19:03.486Z] tests/test_auth.py::test_chave_ausente_ou_curta PASSED                   [100%]
+[2026-11-10T01:19:03.486Z] 
+[2026-11-10T01:19:03.486Z] - generated xml file: /var/jenkins_home/workspace/civiclens-lite/test-results.xml -
+[2026-11-10T01:19:03.486Z] ================================ tests coverage ================================
+[2026-11-10T01:19:03.486Z] _______________ coverage: platform linux, python 3.14.10-final-0 _______________
+[2026-11-10T01:19:03.486Z] 
+[2026-11-10T01:19:03.486Z] Name                Stmts   Miss  Cover   Missing
+[2026-11-10T01:19:03.486Z] -------------------------------------------------
+[2026-11-10T01:19:03.486Z] app/__init__.py         2      0   100%
+[2026-11-10T01:19:03.486Z] app/auth.py            18      0   100%
+[2026-11-10T01:19:03.486Z] app/main.py            36      0   100%
+[2026-11-10T01:19:03.486Z] app/models.py          35      0   100%
+[2026-11-10T01:19:03.486Z] app/repository.py      46      0   100%
+[2026-11-10T01:19:03.486Z] -------------------------------------------------
+[2026-11-10T01:19:03.489Z] TOTAL                 137      0   100%
+[2026-11-10T01:19:03.489Z] Coverage XML written to file coverage.xml
+[2026-11-10T01:19:03.489Z] ============================== 15 passed in 0.82s ==============================
+Post stage
+[Pipeline] junit
+[2026-11-10T01:19:03.765Z] Recording test results
+[2026-11-10T01:19:03.782Z] [Checks API] No suitable checks publisher found.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Análise SonarQube)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] tool
+[Pipeline] withSonarQubeEnv
+[2026-11-10T01:19:03.977Z] Injecting SonarQube environment variables using the configuration: sonarqube
+[Pipeline] {
+[Pipeline] sh
+[2026-11-10T01:19:04.284Z] + /var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonar-scanner/bin/sonar-scanner -Dsonar.projectVersion=14-9daf319
+[2026-11-10T01:19:04.836Z] 01:19:04.611 INFO  Scanner configuration file: /var/jenkins_home/tools/hudson.plugins.sonar.SonarRunnerInstallation/sonar-scanner/conf/sonar-scanner.properties
+[2026-11-10T01:19:04.836Z] 01:19:04.618 INFO  Project root configuration file: /var/jenkins_home/workspace/civiclens-lite/sonar-project.properties
+[2026-11-10T01:19:04.836Z] 01:19:04.649 INFO  SonarScanner CLI 8.4.0.16527
+[2026-11-10T01:19:04.836Z] 01:19:04.657 INFO  Linux 7.0.0-1014-aws amd64
+[2026-11-10T01:19:10.032Z] 01:19:09.028 INFO  Communicating with SonarQube Community Build 26.11.0.134175
+[2026-11-10T01:19:10.032Z] 01:19:09.029 INFO  JRE provisioning: os[linux], arch[x86_64]
+[2026-11-10T01:19:10.032Z] 01:19:09.635 INFO  Starting SonarScanner Engine...
+[2026-11-10T01:19:10.032Z] 01:19:09.638 INFO  Java 21.0.13 Eclipse Adoptium (64-bit)
+[2026-11-10T01:19:15.229Z] 01:19:14.329 INFO  Load global settings
+[2026-11-10T01:19:15.229Z] 01:19:14.475 INFO  Load global settings (done) | time=147ms
+[2026-11-10T01:19:15.229Z] 01:19:14.480 INFO  Server id: 303924D4-AaHC4LObzNMmTtcSQIW4
+[2026-11-10T01:19:15.229Z] 01:19:14.486 INFO  Found an active CI vendor: 'Jenkins'
+[2026-11-10T01:19:15.229Z] 01:19:14.983 INFO  Loading required plugins
+[2026-11-10T01:19:15.229Z] 01:19:14.985 INFO  Load plugins index
+[2026-11-10T01:19:15.229Z] 01:19:15.013 INFO  Load plugins index (done) | time=23ms
+[2026-11-10T01:19:15.229Z] 01:19:15.015 INFO  Load/download plugins
+[2026-11-10T01:19:15.229Z] 01:19:15.025 INFO  Load/download plugins (done) | time=12ms
+[2026-11-10T01:19:15.780Z] 01:19:15.563 INFO  Load project settings for component key: 'civiclens-lite'
+[2026-11-10T01:19:15.780Z] 01:19:15.582 INFO  Load project settings for component key: 'civiclens-lite' (done) | time=21ms
+[2026-11-10T01:19:15.780Z] 01:19:15.601 INFO  Process project properties
+[2026-11-10T01:19:15.780Z] 01:19:15.620 INFO  Process project properties (done) | time=19ms
+[2026-11-10T01:19:15.780Z] 01:19:15.637 INFO  Project key: civiclens-lite
+[2026-11-10T01:19:15.780Z] 01:19:15.638 INFO  Base dir: /var/jenkins_home/workspace/civiclens-lite
+[2026-11-10T01:19:15.780Z] 01:19:15.638 INFO  Working dir: /var/jenkins_home/workspace/civiclens-lite/.scannerwork
+[2026-11-10T01:19:16.031Z] 01:19:15.794 INFO  Load quality profiles
+[2026-11-10T01:19:16.031Z] 01:19:15.849 INFO  Load quality profiles (done) | time=54ms
+[2026-11-10T01:19:16.031Z] 01:19:15.900 INFO  Load active rules
+[2026-11-10T01:19:16.283Z] 01:19:16.189 INFO  Load active rules (done) | time=288ms
+[2026-11-10T01:19:16.283Z] 01:19:16.199 INFO  Load analysis cache
+[2026-11-10T01:19:16.283Z] 01:19:16.222 INFO  Load analysis cache | time=22ms
+[2026-11-10T01:19:16.534Z] 01:19:16.386 INFO  Preprocessing files...
+[2026-11-10T01:19:16.534Z] 01:19:16.465 INFO  1 language detected in 8 preprocessed files (done) | time=79ms
+[2026-11-10T01:19:16.534Z] 01:19:16.466 INFO  8 files ignored because of scm ignore settings
+[2026-11-10T01:19:16.534Z] 01:19:16.474 INFO  Loading plugins for detected languages
+[2026-11-10T01:19:16.534Z] 01:19:16.475 INFO  Load/download plugins
+[2026-11-10T01:19:16.534Z] 01:19:16.498 INFO  Load/download plugins (done) | time=24ms
+[2026-11-10T01:19:16.789Z] 01:19:16.754 INFO  Load project repositories
+[2026-11-10T01:19:17.040Z] 01:19:16.949 INFO  Load project repositories (done) | time=193ms
+[2026-11-10T01:19:17.040Z] 01:19:17.022 INFO  Indexing files...
+[2026-11-10T01:19:17.040Z] 01:19:17.022 INFO  Project configuration:
+[2026-11-10T01:19:17.040Z] 01:19:17.039 INFO  8 files indexed (done) | time=16ms
+[2026-11-10T01:19:17.290Z] 01:19:17.040 INFO  Quality profile for py: Sonar way core
+[2026-11-10T01:19:17.290Z] 01:19:17.040 INFO  ------------- Run sensors on module CivicLens Lite
+[2026-11-10T01:19:17.290Z] 01:19:17.112 INFO  Load metrics repository
+[2026-11-10T01:19:17.290Z] 01:19:17.171 INFO  Load metrics repository (done) | time=60ms
+[2026-11-10T01:19:18.201Z] 01:19:18.133 INFO  Sensor IaC YAML File Type Classification Sensor [iac]
+[2026-11-10T01:19:18.201Z] 01:19:18.138 INFO  Sensor IaC YAML File Type Classification Sensor [iac] (done) | time=5ms
+[2026-11-10T01:19:18.201Z] 01:19:18.139 INFO  Sensor IaC hadolint report Sensor [iac]
+[2026-11-10T01:19:18.201Z] 01:19:18.139 INFO  Sensor IaC hadolint report Sensor [iac] (done) | time=0ms
+[2026-11-10T01:19:18.201Z] 01:19:18.139 INFO  Sensor Java Config Sensor [iac]
+[2026-11-10T01:19:18.201Z] 01:19:18.140 INFO  There are no files to be analyzed for the Java language
+[2026-11-10T01:19:18.201Z] 01:19:18.140 INFO  Sensor Java Config Sensor [iac] (done) | time=0ms
+[2026-11-10T01:19:18.201Z] 01:19:18.147 INFO  Sensor IaC Docker Sensor [iac]
+[2026-11-10T01:19:18.201Z] 01:19:18.149 INFO  There are no files to be analyzed for the Docker language
+[2026-11-10T01:19:18.201Z] 01:19:18.149 INFO  Sensor IaC Docker Sensor [iac] (done) | time=11ms
+[2026-11-10T01:19:18.201Z] 01:19:18.150 INFO  Sensor Python Sensor [python]
+[2026-11-10T01:19:18.757Z] 01:19:18.754 INFO  Starting global symbols computation
+[2026-11-10T01:19:19.008Z] 01:19:18.763 INFO  8 source files to be analyzed
+[2026-11-10T01:19:19.919Z] 01:19:19.779 INFO  8/8 source files have been analyzed
+[2026-11-10T01:19:19.919Z] 01:19:19.782 INFO  Finished step global symbols computation in 1022ms
+[2026-11-10T01:19:19.919Z] 01:19:19.840 INFO  Starting rules execution
+[2026-11-10T01:19:19.919Z] 01:19:19.841 INFO  8 source files to be analyzed
+[2026-11-10T01:19:21.267Z] 01:19:21.146 INFO  8/8 source files have been analyzed
+[2026-11-10T01:19:21.267Z] 01:19:21.147 INFO  Finished step rules execution in 1305ms
+[2026-11-10T01:19:21.267Z] 01:19:21.147 INFO  The Python analyzer was able to leverage cached data from previous analyses for 0 out of 8 files. These files were not parsed.
+[2026-11-10T01:19:21.267Z] 01:19:21.152 INFO  Sensor Python Sensor [python] (done) | time=3000ms
+[2026-11-10T01:19:21.267Z] 01:19:21.152 INFO  Sensor Cobertura Sensor for Python coverage [python]
+[2026-11-10T01:19:21.267Z] 01:19:21.170 INFO  Python test coverage
+[2026-11-10T01:19:21.267Z] 01:19:21.174 INFO  Parsing report '/var/jenkins_home/workspace/civiclens-lite/coverage.xml'
+[2026-11-10T01:19:21.267Z] 01:19:21.254 INFO  Sensor Cobertura Sensor for Python coverage [python] (done) | time=103ms
+[2026-11-10T01:19:21.267Z] 01:19:21.256 INFO  Sensor PythonXUnitSensor [python]
+[2026-11-10T01:19:21.518Z] 01:19:21.282 INFO  Processing report '/var/jenkins_home/workspace/civiclens-lite/test-results.xml'
+[2026-11-10T01:19:21.518Z] 01:19:21.292 INFO  Sensor PythonXUnitSensor [python] (done) | time=37ms
+[2026-11-10T01:19:21.518Z] 01:19:21.293 INFO  Sensor Python Dependency Sensor [python]
+[2026-11-10T01:19:21.518Z] 01:19:21.300 INFO  Sensor Python Dependency Sensor [python] (done) | time=4ms
+[2026-11-10T01:19:21.518Z] 01:19:21.301 INFO  Sensor TextAndSecretsSensor [text]
+[2026-11-10T01:19:21.518Z] 01:19:21.324 INFO  Available processors: 2
+[2026-11-10T01:19:21.518Z] 01:19:21.325 INFO  Using 2 threads for analysis.
+[2026-11-10T01:19:22.069Z] 01:19:21.942 INFO  Start fetching files for the text and secrets analysis
+[2026-11-10T01:19:22.069Z] 01:19:21.952 INFO  Using Git CLI to retrieve dirty files
+[2026-11-10T01:19:22.069Z] 01:19:21.960 INFO  Retrieving language associated files and files included via "sonar.text.inclusions" that are tracked by git
+[2026-11-10T01:19:22.069Z] 01:19:21.962 INFO  Starting the text and secrets analysis
+[2026-11-10T01:19:22.069Z] 01:19:21.963 INFO  8 source files to be analyzed for the text and secrets analysis
+[2026-11-10T01:19:22.069Z] 01:19:21.988 INFO  8/8 source files have been analyzed for the text and secrets analysis
+[2026-11-10T01:19:22.069Z] 01:19:21.991 INFO  Sensor TextAndSecretsSensor [text] (done) | time=692ms
+[2026-11-10T01:19:22.069Z] 01:19:21.995 INFO  ------------- Run sensors on project
+[2026-11-10T01:19:22.320Z] 01:19:22.215 INFO  Sensor IaC Project Sensor [iac]
+[2026-11-10T01:19:22.320Z] 01:19:22.218 INFO  Sensor IaC Project Sensor [iac] (done) | time=3ms
+[2026-11-10T01:19:22.320Z] 01:19:22.218 INFO  Sensor Zero Coverage Sensor
+[2026-11-10T01:19:22.320Z] 01:19:22.219 INFO  Sensor Zero Coverage Sensor (done) | time=0ms
+[2026-11-10T01:19:22.320Z] 01:19:22.219 INFO  ------------- Gather SCA dependencies on project
+[2026-11-10T01:19:22.320Z] 01:19:22.227 INFO  Dependency analysis skipped
+[2026-11-10T01:19:22.320Z] 01:19:22.238 INFO  SCM Publisher SCM provider for this project is: git
+[2026-11-10T01:19:22.320Z] 01:19:22.239 INFO  SCM Publisher 2 source files to be analyzed
+[2026-11-10T01:19:22.570Z] 01:19:22.399 INFO  SCM Publisher 2/2 source files have been analyzed (done) | time=154ms
+[2026-11-10T01:19:22.570Z] 01:19:22.404 INFO  CPD Executor 1 file had no CPD blocks
+[2026-11-10T01:19:22.570Z] 01:19:22.406 INFO  CPD Executor Calculating CPD for 4 files
+[2026-11-10T01:19:22.570Z] 01:19:22.416 INFO  CPD Executor CPD calculation finished (done) | time=8ms
+[2026-11-10T01:19:22.570Z] 01:19:22.426 INFO  SCM revision ID '9daf319142bc41fe54c7f37b5645c29098cc546d'
+[2026-11-10T01:19:22.570Z] 01:19:22.569 INFO  Analysis report generated in 138ms, dir size=186.2 kB
+[2026-11-10T01:19:22.821Z] 01:19:22.610 INFO  Analysis report compressed in 39ms, zip size=47.6 kB
+[2026-11-10T01:19:22.821Z] 01:19:22.640 INFO  Analysis report uploaded in 31ms
+[2026-11-10T01:19:22.821Z] 01:19:22.644 INFO  ANALYSIS SUCCESSFUL, you can find the results at: http://sonarqube:9000/dashboard?id=civiclens-lite
+[2026-11-10T01:19:22.821Z] 01:19:22.644 INFO  Note that you will be able to access the updated dashboard once the server has processed the submitted analysis report
+[2026-11-10T01:19:22.821Z] 01:19:22.645 INFO  More about the report processing at http://sonarqube:9000/api/ce/task?id=9822b4dc-cfc8-441a-aa9d-fb84d307e05d
+[2026-11-10T01:19:22.821Z] 01:19:22.658 INFO  Analysis total time: 12.956 s
+[2026-11-10T01:19:22.821Z] 01:19:22.704 INFO  SonarScanner Engine completed successfully
+[2026-11-10T01:19:22.821Z] 01:19:22.744 INFO  EXECUTION SUCCESS
+[2026-11-10T01:19:22.821Z] 01:19:22.745 INFO  Total time: 18.187s
+[Pipeline] }
+[Pipeline] // withSonarQubeEnv
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Quality Gate)
+[Pipeline] timeout
+[2026-11-10T01:19:23.670Z] Timeout set to expire in 5 min 0 sec
+[Pipeline] {
+[Pipeline] waitForQualityGate
+[2026-11-10T01:19:23.727Z] Checking status of SonarQube task '9822b4dc-cfc8-441a-aa9d-fb84d307e05d' on server 'sonarqube'
+[2026-11-10T01:19:23.748Z] SonarQube task '9822b4dc-cfc8-441a-aa9d-fb84d307e05d' status is 'IN_PROGRESS'
+[2026-11-10T01:19:24.198Z] The incoming webhook matched the configured webhook secret
+[2026-11-10T01:19:24.198Z] SonarQube task '9822b4dc-cfc8-441a-aa9d-fb84d307e05d' status is 'SUCCESS'
+[2026-11-10T01:19:24.198Z] SonarQube task '9822b4dc-cfc8-441a-aa9d-fb84d307e05d' completed. Quality gate is 'OK'
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker Build)
+[Pipeline] sh
+[2026-11-10T01:19:24.682Z] + docker build --pull --build-arg APP_VERSION=14-9daf319 -t 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319 -t 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:latest .
+[2026-11-10T01:19:24.934Z] #0 building with "default" instance using docker driver
+[2026-11-10T01:19:24.934Z] 
+[2026-11-10T01:19:24.934Z] #1 [internal] load build definition from Dockerfile
+[2026-11-10T01:19:24.934Z] #1 transferring dockerfile: 1.27kB done
+[2026-11-10T01:19:24.934Z] #1 DONE 0.0s
+[2026-11-10T01:19:24.934Z] 
+[2026-11-10T01:19:24.934Z] #2 [internal] load metadata for docker.io/library/python:3.14.10-alpine3.24
+[2026-11-10T01:19:24.934Z] #2 DONE 0.1s
+[2026-11-10T01:19:25.184Z] 
+[2026-11-10T01:19:25.184Z] #3 [internal] load .dockerignore
+[2026-11-10T01:19:25.184Z] #3 transferring context: 207B done
+[2026-11-10T01:19:25.184Z] #3 DONE 0.0s
+[2026-11-10T01:19:25.184Z] 
+[2026-11-10T01:19:25.184Z] #4 [internal] load build context
+[2026-11-10T01:19:25.184Z] #4 transferring context: 3.62kB done
+[2026-11-10T01:19:25.184Z] #4 DONE 0.0s
+[2026-11-10T01:19:25.184Z] 
+[2026-11-10T01:19:25.184Z] #5 [builder 1/5] FROM docker.io/library/python:3.14.10-alpine3.24@sha256:a18b20ad69e74df6cf6d2e1b1a260d7a1ecf5380fd83b310f83ba88c461cf894
+[2026-11-10T01:19:25.184Z] #5 resolve docker.io/library/python:3.14.10-alpine3.24@sha256:a18b20ad69e74df6cf6d2e1b1a260d7a1ecf5380fd83b310f83ba88c461cf894 0.0s done
+[2026-11-10T01:19:25.184Z] #5 CACHED
+[2026-11-10T01:19:25.184Z] 
+[2026-11-10T01:19:25.184Z] #6 [builder 4/5] COPY requirements.txt .
+[2026-11-10T01:19:25.184Z] #6 CACHED
+[2026-11-10T01:19:25.184Z] 
+[2026-11-10T01:19:25.184Z] #7 [builder 2/5] WORKDIR /build
+[2026-11-10T01:19:25.184Z] #7 CACHED
+[2026-11-10T01:19:25.184Z] 
+[2026-11-10T01:19:25.184Z] #8 [builder 3/5] RUN python -m venv /opt/venv
+[2026-11-10T01:19:25.184Z] #8 CACHED
+[2026-11-10T01:19:25.184Z] 
+[2026-11-10T01:19:25.184Z] #9 [builder 5/5] RUN pip install --no-cache-dir --upgrade pip     && pip install --no-cache-dir -r requirements.txt     && pip uninstall -y pip
+[2026-11-10T01:19:25.184Z] #9 CACHED
+[2026-11-10T01:19:25.184Z] 
+[2026-11-10T01:19:25.184Z] #10 [stage-1 2/5] RUN apk upgrade --no-cache     && addgroup -S app && adduser -S -G app -H -s /sbin/nologin app     && pip uninstall -y pip
+[2026-11-10T01:19:25.735Z] #10 0.632 (1/1) Upgrading zlib (1.3.2-r1 -> 1.4-r0)
+[2026-11-10T01:19:25.735Z] #10 0.638 OK: 12.1 MiB in 30 packages
+[2026-11-10T01:19:28.219Z] #10 2.971 Found existing installation: pip 26.2.2
+[2026-11-10T01:19:28.219Z] #10 3.010 Uninstalling pip-26.2.2:
+[2026-11-10T01:19:28.219Z] #10 3.138   Successfully uninstalled pip-26.2.2
+[2026-11-10T01:19:28.219Z] #10 3.153 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+[2026-11-10T01:19:28.219Z] #10 DONE 3.3s
+[2026-11-10T01:19:28.469Z] 
+[2026-11-10T01:19:28.469Z] #11 [stage-1 3/5] WORKDIR /app
+[2026-11-10T01:19:28.469Z] #11 DONE 0.1s
+[2026-11-10T01:19:28.469Z] 
+[2026-11-10T01:19:28.469Z] #12 [stage-1 4/5] COPY --from=builder /opt/venv /opt/venv
+[2026-11-10T01:19:28.469Z] #12 DONE 0.2s
+[2026-11-10T01:19:28.720Z] 
+[2026-11-10T01:19:28.720Z] #13 [stage-1 5/5] COPY --chown=app:app app ./app
+[2026-11-10T01:19:28.720Z] #13 DONE 0.1s
+[2026-11-10T01:19:28.720Z] 
+[2026-11-10T01:19:28.720Z] #14 exporting to image
+[2026-11-10T01:19:28.720Z] #14 exporting layers
+[2026-11-10T01:19:30.063Z] #14 exporting layers 1.2s done
+[2026-11-10T01:19:30.063Z] #14 exporting manifest sha256:9ac5916fa143a3bd2d61f97de8517881592bce416ee73f39c823dbe2e5c43f05
+[2026-11-10T01:19:30.063Z] #14 exporting manifest sha256:9ac5916fa143a3bd2d61f97de8517881592bce416ee73f39c823dbe2e5c43f05 0.0s done
+[2026-11-10T01:19:30.063Z] #14 exporting config sha256:fe576f215290f9cccc3e2d55b503c6b5b3d66012af569dcf791a9f2c07984dbe 0.0s done
+[2026-11-10T01:19:30.063Z] #14 exporting attestation manifest sha256:795ce7bb6dcee04abf9560059cfae2504673082ed3d19d1ca43f54fd74f49092 0.0s done
+[2026-11-10T01:19:30.063Z] #14 exporting manifest list sha256:9173624eff129dcc71c88a49ed36157397eaa984c52d278d6ce93d30576a8d82 0.0s done
+[2026-11-10T01:19:30.063Z] #14 naming to 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319 done
+[2026-11-10T01:19:30.063Z] #14 unpacking to 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319
+[2026-11-10T01:19:30.314Z] #14 unpacking to 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319 0.3s done
+[2026-11-10T01:19:30.314Z] #14 naming to 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:latest done
+[2026-11-10T01:19:30.314Z] #14 unpacking to 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:latest done
+[2026-11-10T01:19:30.314Z] #14 DONE 1.7s
+[2026-11-10T01:19:30.314Z] + docker image ls 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite
+[2026-11-10T01:19:30.565Z] IMAGE                                                                    ID             DISK USAGE   CONTENT SIZE   EXTRA
+[2026-11-10T01:19:30.565Z] 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:10-1945b67   3d7a82e9931a        101MB         24.1MB        
+[2026-11-10T01:19:30.565Z] 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:11-b01d9d8   cbf395dd288c        101MB         24.1MB        
+[2026-11-10T01:19:30.565Z] 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:13-1b7887e   b8804ead0246        101MB         24.1MB   U    
+[2026-11-10T01:19:30.565Z] 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319   9173624eff12        101MB         24.1MB        
+[2026-11-10T01:19:30.565Z] 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:2-bb0a848    53e6cac3de3f        120MB         28.1MB        
+[2026-11-10T01:19:30.565Z] 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:3-b048c8f    1a464ac86ae3        120MB         28.1MB        
+[2026-11-10T01:19:30.565Z] 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:4-e10c677    18406bf0a879        101MB           24MB        
+[2026-11-10T01:19:30.565Z] 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:6-b52b93f    9e2565d127c8        101MB           24MB        
+[2026-11-10T01:19:30.565Z] 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:7-20150b8    bf350c3e0d35        105MB         24.8MB        
+[2026-11-10T01:19:30.565Z] 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:8-40e5eba    4f3312990a58        101MB         24.1MB        
+[2026-11-10T01:19:30.565Z] 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:9-06b62a2    e7a771f279e3        101MB         24.1MB        
+[2026-11-10T01:19:30.565Z] 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:latest       9173624eff12        101MB         24.1MB        
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Trivy Scan)
+[Pipeline] sh
+[2026-11-10T01:19:30.933Z] + trivy image --cache-dir /var/jenkins_home/.cache/trivy --scanners vuln --download-db-only
+[2026-11-10T01:19:30.934Z] + trivy image --cache-dir /var/jenkins_home/.cache/trivy --scanners vuln --skip-db-update --severity HIGH,CRITICAL --format table 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319
+[2026-11-10T01:19:30.934Z] + tee reports/trivy-report.txt
+[2026-11-10T01:19:30.934Z] 2026-11-10T01:19:30Z	INFO	[vuln] Vulnerability scanning is enabled
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:31Z	INFO	[python] Licenses acquired from one or more METADATA files may be subject to additional terms. Use `--debug` flag to see all affected packages.
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:31Z	INFO	Detected OS	family="alpine" version="3.24.4"
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:31Z	INFO	[alpine] Detecting vulnerabilities...	os_version="3.24" repository="3.24" pkg_num=30
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:31Z	INFO	Number of language-specific files	num=1
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:31Z	INFO	[python-pkg] Detecting vulnerabilities...
+[2026-11-10T01:19:32.279Z] 
+[2026-11-10T01:19:32.279Z] Report Summary
+[2026-11-10T01:19:32.279Z] 
+[2026-11-10T01:19:32.279Z] ┌──────────────────────────────────────────────────────────────────────────────────┬────────────┬─────────────────┐
+[2026-11-10T01:19:32.279Z] │                                      Target                                      │    Type    │ Vulnerabilities │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319 (alpine   │   alpine   │        0        │
+[2026-11-10T01:19:32.279Z] │ 3.24.4)                                                                          │            │                 │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/annotated_doc-0.0.5.dist-info/METADATA     │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/annotated_types-0.8.0.dist-info/METADATA   │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/anyio-4.16.0.dist-info/METADATA            │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/click-8.5.1.dist-info/METADATA             │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/fastapi-0.162.2.dist-info/METADATA         │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/h11-0.16.0.dist-info/METADATA              │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/idna-3.20.dist-info/METADATA               │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/opentelemetry_api-1.45.2.dist-info/METADA- │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] │ TA                                                                               │            │                 │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/pydantic-2.14.3.dist-info/METADATA         │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/pydantic_core-2.50.4.dist-info/METADATA    │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/pyjwt-2.15.1.dist-info/METADATA            │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/starlette-1.10.0.dist-info/METADATA        │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/typing_extensions-4.16.0.dist-info/METADA- │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] │ TA                                                                               │            │                 │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/typing_inspection-0.4.5.dist-info/METADATA │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.279Z] │ opt/venv/lib/python3.14/site-packages/uvicorn-0.54.0.dist-info/METADATA          │ python-pkg │        0        │
+[2026-11-10T01:19:32.279Z] └──────────────────────────────────────────────────────────────────────────────────┴────────────┴─────────────────┘
+[2026-11-10T01:19:32.279Z] Legend:
+[2026-11-10T01:19:32.279Z] - '-': Not scanned
+[2026-11-10T01:19:32.279Z] - '0': Clean (no security findings detected)
+[2026-11-10T01:19:32.279Z] 
+[2026-11-10T01:19:32.279Z] + trivy image --cache-dir /var/jenkins_home/.cache/trivy --scanners vuln --skip-db-update --format json --output reports/trivy-report.json 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:31Z	INFO	[vuln] Vulnerability scanning is enabled
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:32Z	INFO	Detected OS	family="alpine" version="3.24.4"
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:32Z	INFO	[alpine] Detecting vulnerabilities...	os_version="3.24" repository="3.24" pkg_num=30
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:32Z	INFO	Number of language-specific files	num=1
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:32Z	INFO	[python-pkg] Detecting vulnerabilities...
+[2026-11-10T01:19:32.279Z] + trivy image --cache-dir /var/jenkins_home/.cache/trivy --scanners vuln --skip-db-update --format template --template @/opt/trivy/html.tpl --output reports/trivy-report.html 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:32Z	INFO	[vuln] Vulnerability scanning is enabled
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:32Z	INFO	Detected OS	family="alpine" version="3.24.4"
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:32Z	INFO	[alpine] Detecting vulnerabilities...	os_version="3.24" repository="3.24" pkg_num=30
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:32Z	INFO	Number of language-specific files	num=1
+[2026-11-10T01:19:32.279Z] 2026-11-10T01:19:32Z	INFO	[python-pkg] Detecting vulnerabilities...
+[2026-11-10T01:19:32.279Z] + echo Resumo de vulnerabilidades por severidade:
+[2026-11-10T01:19:32.279Z] Resumo de vulnerabilidades por severidade:
+[2026-11-10T01:19:32.279Z] + jq [.Results[]?.Vulnerabilities[]?.Severity] | group_by(.) | map({(.[0]): length}) | add // {} reports/trivy-report.json
+[2026-11-10T01:19:32.279Z] {}
+[2026-11-10T01:19:32.279Z] + trivy image --cache-dir /var/jenkins_home/.cache/trivy --scanners vuln --skip-db-update --severity CRITICAL --exit-code 1 --format table 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319
+[2026-11-10T01:19:32.530Z] 2026-11-10T01:19:32Z	INFO	[vuln] Vulnerability scanning is enabled
+[2026-11-10T01:19:32.530Z] 2026-11-10T01:19:32Z	INFO	Detected OS	family="alpine" version="3.24.4"
+[2026-11-10T01:19:32.530Z] 2026-11-10T01:19:32Z	INFO	[alpine] Detecting vulnerabilities...	os_version="3.24" repository="3.24" pkg_num=30
+[2026-11-10T01:19:32.530Z] 2026-11-10T01:19:32Z	INFO	Number of language-specific files	num=1
+[2026-11-10T01:19:32.530Z] 2026-11-10T01:19:32Z	INFO	[python-pkg] Detecting vulnerabilities...
+[2026-11-10T01:19:32.530Z] 
+[2026-11-10T01:19:32.530Z] Report Summary
+[2026-11-10T01:19:32.530Z] 
+[2026-11-10T01:19:32.530Z] ┌──────────────────────────────────────────────────────────────────────────────────┬────────────┬─────────────────┐
+[2026-11-10T01:19:32.530Z] │                                      Target                                      │    Type    │ Vulnerabilities │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319 (alpine   │   alpine   │        0        │
+[2026-11-10T01:19:32.530Z] │ 3.24.4)                                                                          │            │                 │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/annotated_doc-0.0.5.dist-info/METADATA     │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/annotated_types-0.8.0.dist-info/METADATA   │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/anyio-4.16.0.dist-info/METADATA            │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/click-8.5.1.dist-info/METADATA             │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/fastapi-0.162.2.dist-info/METADATA         │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/h11-0.16.0.dist-info/METADATA              │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/idna-3.20.dist-info/METADATA               │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/opentelemetry_api-1.45.2.dist-info/METADA- │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] │ TA                                                                               │            │                 │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/pydantic-2.14.3.dist-info/METADATA         │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/pydantic_core-2.50.4.dist-info/METADATA    │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/pyjwt-2.15.1.dist-info/METADATA            │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/starlette-1.10.0.dist-info/METADATA        │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/typing_extensions-4.16.0.dist-info/METADA- │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] │ TA                                                                               │            │                 │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/typing_inspection-0.4.5.dist-info/METADATA │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] ├──────────────────────────────────────────────────────────────────────────────────┼────────────┼─────────────────┤
+[2026-11-10T01:19:32.530Z] │ opt/venv/lib/python3.14/site-packages/uvicorn-0.54.0.dist-info/METADATA          │ python-pkg │        0        │
+[2026-11-10T01:19:32.530Z] └──────────────────────────────────────────────────────────────────────────────────┴────────────┴─────────────────┘
+[2026-11-10T01:19:32.530Z] Legend:
+[2026-11-10T01:19:32.530Z] - '-': Not scanned
+[2026-11-10T01:19:32.530Z] - '0': Clean (no security findings detected)
+[2026-11-10T01:19:32.530Z] 
+Post stage
+[Pipeline] archiveArtifacts
+[2026-11-10T01:19:32.566Z] Archiving artifacts
+[Pipeline] publishHTML
+[2026-11-10T01:19:32.601Z] [htmlpublisher] Archiving HTML reports...
+[2026-11-10T01:19:32.602Z] [htmlpublisher] Archiving at BUILD level /var/jenkins_home/workspace/civiclens-lite/reports to Relatorio_20Trivy
+[2026-11-10T01:19:32.602Z] [htmlpublisher] Copying recursive using current thread
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Publicação no ECR)
+[Pipeline] sh
+[2026-11-10T01:19:32.990Z] + aws ecr get-login-password --region us-east-1
+[2026-11-10T01:19:32.990Z] + docker login --username AWS --password-stdin 345843269906.dkr.ecr.us-east-1.amazonaws.com
+[2026-11-10T01:19:33.902Z] 
+[2026-11-10T01:19:33.902Z] WARNING! Your credentials are stored unencrypted in '/var/jenkins_home/.docker/config.json'.
+[2026-11-10T01:19:33.902Z] Configure a credential helper to remove this warning. See
+[2026-11-10T01:19:33.902Z] https://docs.docker.com/go/credential-store/
+[2026-11-10T01:19:33.902Z] 
+[2026-11-10T01:19:33.902Z] Login Succeeded
+[2026-11-10T01:19:33.902Z] + docker push 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319
+[2026-11-10T01:19:33.902Z] The push refers to repository [345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite]
+[2026-11-10T01:19:33.902Z] 69f156d17328: Layer already exists
+[2026-11-10T01:19:33.902Z] 98416778cfe8: Waiting
+[2026-11-10T01:19:33.902Z] 44136fa355b3: Already exists
+[2026-11-10T01:19:33.902Z] ddab54470924: Layer already exists
+[2026-11-10T01:19:33.902Z] 6898526789b2: Layer already exists
+[2026-11-10T01:19:33.902Z] 5f227ad56506: Waiting
+[2026-11-10T01:19:33.902Z] 38cfabe888ce: Waiting
+[2026-11-10T01:19:33.902Z] 881fc932939e: Layer already exists
+[2026-11-10T01:19:33.902Z] 6da1d27cf93f: Waiting
+[2026-11-10T01:19:34.152Z] 70c962f07ccf: Waiting
+[2026-11-10T01:19:34.152Z] 6da1d27cf93f: Pushed
+[2026-11-10T01:19:34.403Z] 98416778cfe8: Pushed
+[2026-11-10T01:19:34.403Z] 5f227ad56506: Pushed
+[2026-11-10T01:19:34.403Z] 70c962f07ccf: Waiting
+[2026-11-10T01:19:34.403Z] 38cfabe888ce: Pushed
+[2026-11-10T01:19:34.653Z] 70c962f07ccf: Pushed
+[2026-11-10T01:19:35.204Z] 14-9daf319: digest: sha256:9173624eff129dcc71c88a49ed36157397eaa984c52d278d6ce93d30576a8d82 size: 856
+[2026-11-10T01:19:35.204Z] + docker push 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:latest
+[2026-11-10T01:19:35.204Z] The push refers to repository [345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite]
+[2026-11-10T01:19:35.204Z] 98416778cfe8: Already exists
+[2026-11-10T01:19:35.204Z] 5f227ad56506: Layer already exists
+[2026-11-10T01:19:35.204Z] 70c962f07ccf: Layer already exists
+[2026-11-10T01:19:35.204Z] 44136fa355b3: Already exists
+[2026-11-10T01:19:35.204Z] 881fc932939e: Layer already exists
+[2026-11-10T01:19:35.204Z] ddab54470924: Layer already exists
+[2026-11-10T01:19:35.204Z] 6898526789b2: Layer already exists
+[2026-11-10T01:19:35.204Z] 6da1d27cf93f: Layer already exists
+[2026-11-10T01:19:35.204Z] 38cfabe888ce: Layer already exists
+[2026-11-10T01:19:35.204Z] 69f156d17328: Layer already exists
+[2026-11-10T01:19:35.454Z] latest: digest: sha256:9173624eff129dcc71c88a49ed36157397eaa984c52d278d6ce93d30576a8d82 size: 856
+[2026-11-10T01:19:35.454Z] + aws ecr describe-images --region us-east-1 --repository-name civiclens-lite --image-ids imageTag=14-9daf319 --query imageDetails[0].{tags:imageTags,digest:imageDigest,pushedAt:imagePushedAt}
+[2026-11-10T01:19:36.005Z] {
+[2026-11-10T01:19:36.005Z]     "tags": [
+[2026-11-10T01:19:36.005Z]         "latest",
+[2026-11-10T01:19:36.005Z]         "14-9daf319"
+[2026-11-10T01:19:36.005Z]     ],
+[2026-11-10T01:19:36.005Z]     "digest": "sha256:9173624eff129dcc71c88a49ed36157397eaa984c52d278d6ce93d30576a8d82",
+[2026-11-10T01:19:36.005Z]     "pushedAt": "2026-11-10T01:19:34.738000+00:00"
+[2026-11-10T01:19:36.005Z] }
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy (Docker Compose))
+[Pipeline] sh
+[2026-11-10T01:19:36.617Z] + docker network inspect devsecops
+[2026-11-10T01:19:36.617Z] + IMAGE=345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319 docker compose -p civiclens up -d --remove-orphans
+[2026-11-10T01:19:36.617Z]  Container civiclens-app Recreate 
+[2026-11-10T01:19:37.167Z]  Container civiclens-app Recreated 
+[2026-11-10T01:19:37.167Z]  Container civiclens-app Starting 
+[2026-11-10T01:19:37.418Z]  Container civiclens-app Started 
+[2026-11-10T01:19:37.418Z] + docker compose -p civiclens ps
+[2026-11-10T01:19:37.418Z] NAME            IMAGE                                                                    COMMAND                  SERVICE         CREATED        STATUS                                     PORTS
+[2026-11-10T01:19:37.418Z] civiclens-app   345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319   "uvicorn app.main:ap…"   civiclens-app   1 second ago   Up Less than a second (health: starting)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Validação funcional)
+[Pipeline] sh
+[2026-11-10T01:19:37.818Z] + ./scripts/smoke-test.sh http://civiclens-app:8000 14-9daf319
+[2026-11-10T01:19:37.818Z] + tee reports/smoke-test.txt
+[2026-11-10T01:19:37.818Z] Validando aplicação em http://civiclens-app:8000
+[2026-11-10T01:19:39.681Z] GET /health -> {"status":"ok","service":"civiclens-lite","version":"14-9daf319"}
+[2026-11-10T01:19:39.682Z] OK: versão em execução confere (14-9daf319)
+[2026-11-10T01:19:39.683Z] GET /api/v1/ocorrencias -> 3 ocorrências
+[2026-11-10T01:19:39.683Z] POST /api/v1/ocorrencias -> HTTP 201, protocolo CL-2026-00004
+[2026-11-10T01:19:39.683Z] GET /api/v1/estatisticas -> {"total":4,"por_status":{"recebida":4,"em_andamento":0,"resolvida":0,"rejeitada":0},"por_severidade":{"baixa":1,"media":1,"alta":1,"critica":1}}
+[2026-11-10T01:19:39.683Z] Validação funcional concluída com sucesso
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] archiveArtifacts
+[2026-11-10T01:19:39.800Z] Archiving artifacts
+[Pipeline] sh
+[2026-11-10T01:19:40.088Z] + docker image prune -f
+[Pipeline] echo
+[2026-11-10T01:19:40.117Z] Pipeline concluída: 345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319 publicada e em execução.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

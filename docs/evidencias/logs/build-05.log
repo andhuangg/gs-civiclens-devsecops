@@ -1,0 +1,149 @@
+Started by GitHub push by andhuangg
+Obtained Jenkinsfile from git https://github.com/andhuangg/gs-civiclens-devsecops.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/civiclens-lite
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/civiclens-lite/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/andhuangg/gs-civiclens-devsecops.git # timeout=10
+Fetching upstream changes from https://github.com/andhuangg/gs-civiclens-devsecops.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/andhuangg/gs-civiclens-devsecops.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 380555aec9ec9ebffd9f3098169e16bb6dc55b53 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 380555aec9ec9ebffd9f3098169e16bb6dc55b53 # timeout=10
+Commit message: "Fixa versão do h11 nas dependências"
+ > git rev-list --no-walk e10c677db4be652c06d006733a2cd8a45d6710a3 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timestamps
+[Pipeline] {
+[Pipeline] timeout
+[2026-11-10T01:02:30.705Z] Timeout set to expire in 30 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] checkout
+[2026-11-10T01:02:30.901Z] Selected Git installation does not exist. Using Default
+[2026-11-10T01:02:30.901Z] The recommended git tool is: NONE
+[2026-11-10T01:02:30.901Z] No credentials specified
+[2026-11-10T01:02:30.902Z]  > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/civiclens-lite/.git # timeout=10
+[2026-11-10T01:02:30.922Z] Fetching changes from the remote Git repository
+[2026-11-10T01:02:30.927Z]  > git config remote.origin.url https://github.com/andhuangg/gs-civiclens-devsecops.git # timeout=10
+[2026-11-10T01:02:30.946Z] Fetching upstream changes from https://github.com/andhuangg/gs-civiclens-devsecops.git
+[2026-11-10T01:02:30.946Z]  > git --version # timeout=10
+[2026-11-10T01:02:30.960Z]  > git --version # 'git version 2.47.3'
+[2026-11-10T01:02:30.960Z]  > git fetch --tags --force --progress -- https://github.com/andhuangg/gs-civiclens-devsecops.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+[2026-11-10T01:02:31.275Z]  > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+[2026-11-10T01:02:31.289Z] Checking out Revision 380555aec9ec9ebffd9f3098169e16bb6dc55b53 (refs/remotes/origin/main)
+[2026-11-10T01:02:31.289Z]  > git config core.sparsecheckout # timeout=10
+[2026-11-10T01:02:31.299Z]  > git checkout -f 380555aec9ec9ebffd9f3098169e16bb6dc55b53 # timeout=10
+[2026-11-10T01:02:31.318Z] Commit message: "Fixa versão do h11 nas dependências"
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
+[2026-11-10T01:02:31.671Z] + git rev-parse --short=7 HEAD
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] sh
+[2026-11-10T01:02:32.011Z] + git log -1 --pretty=Commit: %h | Autor: %an | Mensagem: %s
+[2026-11-10T01:02:32.011Z] Commit: 380555a | Autor: andhuangg | Mensagem: Fixa versão do h11 nas dependências
+[Pipeline] sh
+[2026-11-10T01:02:32.282Z] + mkdir -p reports
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Testes automatizados)
+[Pipeline] sh
+[2026-11-10T01:02:32.628Z] + id -u
+[2026-11-10T01:02:32.628Z] + id -g
+[2026-11-10T01:02:32.628Z] + docker run --rm -u 1000:1000 -e HOME=/tmp -v /var/jenkins_home/workspace/civiclens-lite:/var/jenkins_home/workspace/civiclens-lite -w /var/jenkins_home/workspace/civiclens-lite python:3.14.10-alpine3.24 sh -c python -m venv /tmp/venv && /tmp/venv/bin/pip install -q -r requirements-dev.txt && /tmp/venv/bin/pytest
+[2026-11-10T01:02:47.394Z] ERROR: Cannot install -r /var/jenkins_home/workspace/civiclens-lite/requirements.txt (line 2), h11==0.14.0 and httpx2 because these package versions have conflicting dependencies.
+[2026-11-10T01:02:47.394Z] 
+[2026-11-10T01:02:47.394Z] [notice] A new release of pip is available: 26.2.2 -> 26.3
+[2026-11-10T01:02:47.394Z] [notice] To update, run: /tmp/venv/bin/python -m pip install --upgrade pip
+[2026-11-10T01:02:47.394Z] ERROR: ResolutionImpossible: for help visit https://pip.pypa.io/en/latest/topics/dependency-resolution/#dealing-with-dependency-conflicts
+Post stage
+[Pipeline] junit
+[2026-11-10T01:02:48.074Z] Recording test results
+[2026-11-10T01:02:48.092Z] [Checks API] No suitable checks publisher found.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Análise SonarQube)
+Stage "Análise SonarQube" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Quality Gate)
+Stage "Quality Gate" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Docker Build)
+Stage "Docker Build" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Trivy Scan)
+Stage "Trivy Scan" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Publicação no ECR)
+Stage "Publicação no ECR" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy (Docker Compose))
+Stage "Deploy (Docker Compose)" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Validação funcional)
+Stage "Validação funcional" skipped due to earlier failure(s)
+[Pipeline] getContext
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] archiveArtifacts
+[2026-11-10T01:02:49.091Z] Archiving artifacts
+[Pipeline] sh
+[2026-11-10T01:02:49.374Z] + docker image prune -f
+[Pipeline] echo
+[2026-11-10T01:02:49.396Z] Pipeline bloqueada. Verifique o estágio que falhou nos logs acima.
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // timestamps
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+ERROR: script returned exit code 1
+Finished: FAILURE
