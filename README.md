@@ -26,18 +26,18 @@ O **CivicLens Lite** é uma API para cidadãos registrarem e acompanharem ocorr�
 
 ```mermaid
 flowchart LR
-    DEV[Commit / push] --> GH[GitHub]
-    GH -- webhook --> J[Jenkins]
-    J --> T[Testes pytest]
-    T --> S[SonarQube]
-    S --> QG{Quality Gate}
-    QG -- reprovado --> X1[Pipeline bloqueada]
-    QG -- aprovado --> B[Docker Build]
-    B --> TV{Trivy}
-    TV -- CRITICAL --> X2[Pipeline bloqueada]
-    TV -- sem CRITICAL --> R[Amazon ECR]
-    R --> D[Deploy Docker Compose]
-    D --> V[Validação HTTP]
+    DEV[Commit / push] ==> GH[GitHub]
+    GH ==>|webhook| J[Jenkins]
+    J ==> T[Testes pytest]
+    T ==> S[SonarQube]
+    S ==> QG{Quality Gate}
+    QG ==>|reprovado| X1[Pipeline bloqueada]
+    QG ==>|aprovado| B[Docker Build]
+    B ==> TV{Trivy}
+    TV ==>|CRITICAL| X2[Pipeline bloqueada]
+    TV ==>|sem CRITICAL| R[Amazon ECR]
+    R ==> D[Deploy Docker Compose]
+    D ==> V[Validação HTTP]
 ```
 
 Toda a plataforma roda em uma EC2 Ubuntu 24.04 (t3.large) na AWS, provisionada com Terraform:
@@ -80,6 +80,33 @@ O Jenkins acessa o ECR por meio de uma IAM Role da instância (sem access keys e
 | Security Hotspots revisados em código novo | menor que 100% |
 
 As quatro últimas condições são as padrão "Clean as You Code" do SonarQube; as quatro primeiras foram adicionadas para avaliar também o código total.
+
+## Resultados
+
+| Indicador | Resultado (build #14) |
+|---|---|
+| Testes automatizados | 15 passando, 0 falhas |
+| Cobertura (SonarQube) | 100% |
+| Bugs, vulnerabilidades e code smells | 0 / 0 / 0 |
+| Ratings (Reliability, Security, Maintainability) | A / A / A |
+| Quality Gate | Aprovado |
+| Trivy (imagem final) | 0 vulnerabilidades (nenhuma LOW, MEDIUM, HIGH ou CRITICAL) |
+| Imagem publicada | `civiclens-lite:14-9daf319` no Amazon ECR |
+| Validação pós-deploy | health, versão, GET, POST e estatísticas OK |
+
+## Troubleshooting
+
+Falhas reais e controladas ao longo do desenvolvimento, todas registradas no histórico do Jenkins. Em todos os bloqueios a imagem não foi publicada no ECR e a versão em produção permaneceu a anterior.
+
+| Build | Estágio que bloqueou | Causa | Correção | Build verde |
+|---|---|---|---|---|
+| #1 | Quality Gate (timeout) | SonarQube 26 recusa webhook para IP interno da rede Docker (proteção contra SSRF) | Webhook pela URL pública do Jenkins, com secret HMAC e regra de security group só para o próprio IP | #2 |
+| #3 | Nenhum (achado não bloqueante) | Trivy apontou HIGH CVE-2025-47273 no setuptools vendorizado pelo pip e MEDIUM no zlib | Remoção do pip da imagem final e `apk upgrade` | #4 (0 vulnerabilidades) |
+| #5 | Testes automatizados | Pin `h11==0.14.0` (CVE-2025-43859) conflita com o `httpx2`, o pip recusa a instalação | Remoção do pin | #6 |
+| #7 | Trivy (CRITICAL) | `python-jose==3.3.0` trazido do CivicLens original: CVE-2024-33663 e CVE-2026-85394 (sem correção) | Troca por `PyJWT 2.15.1` | #8 |
+| #12 | Quality Gate | Regra `python:S5659`: JWT decodificado sem verificar assinatura (Security Rating D) | Extração do usuário passa a validar assinatura e expiração | #13 |
+
+Evidências completas em [`docs/evidencias`](docs/evidencias): logs dos builds, relatórios Trivy (TXT, JSON e HTML), métricas do SonarQube, imagens no ECR e containers em execução.
 
 ## Como executar localmente
 
