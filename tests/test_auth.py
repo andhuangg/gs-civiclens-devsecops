@@ -1,7 +1,7 @@
 import jwt
 import pytest
 
-from app.auth import gerar_token, validar_token
+from app.auth import extrair_usuario, gerar_token, validar_token
 
 
 def test_gerar_e_validar_token():
@@ -13,3 +13,8 @@ def test_token_expirado():
     token = gerar_token("cidadao@civiclens.local", minutos=-1)
     with pytest.raises(jwt.ExpiredSignatureError):
         validar_token(token)
+
+
+def test_extrair_usuario():
+    token = gerar_token("fiscal@civiclens.local")
+    assert extrair_usuario(token) == "fiscal@civiclens.local"

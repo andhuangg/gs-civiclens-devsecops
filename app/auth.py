@@ -14,3 +14,7 @@ def gerar_token(usuario: str, minutos: int = 30) -> str:
 
 def validar_token(token: str) -> str:
     return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITMO])["sub"]
+
+
+def extrair_usuario(token: str) -> str:
+    return jwt.decode(token, options={"verify_signature": False})["sub"]
