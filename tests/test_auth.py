@@ -18,3 +18,10 @@ def test_token_expirado():
 def test_extrair_usuario():
     token = gerar_token("fiscal@civiclens.local")
     assert extrair_usuario(token) == "fiscal@civiclens.local"
+
+
+def test_extrair_usuario_rejeita_token_adulterado():
+    token = gerar_token("fiscal@civiclens.local")
+    cabecalho, payload, _ = token.split(".")
+    with pytest.raises(jwt.InvalidSignatureError):
+        extrair_usuario(f"{cabecalho}.{payload}.assinatura-falsa")

@@ -17,4 +17,4 @@ def validar_token(token: str) -> str:
 
 
 def extrair_usuario(token: str) -> str:
-    return jwt.decode(token, options={"verify_signature": False})["sub"]
+    return validar_token(token)
