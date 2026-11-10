@@ -4,7 +4,7 @@ Global Solution 2026 da FIAP, disciplina DevOps & DevSecOps. Tema **CitizenTech:
 
 | Participante | RM | Turma |
 |---|---|---|
-| Anderson Huang | 565920 | TURMA_A_DEFINIR |
+| Anderson Huang | 565920 | 2TCNPZ |
 
 ## Sobre a aplicação
 
