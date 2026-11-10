@@ -67,3 +67,8 @@ def atualizar_status(ocorrencia_id: int, dados: AtualizarStatus) -> Ocorrencia:
 @app.get("/api/v1/estatisticas", tags=["ocorrencias"])
 def estatisticas() -> dict:
     return repositorio.estatisticas()
+
+
+@app.get("/api/v1/categorias", tags=["ocorrencias"])
+def listar_categorias() -> list[dict]:
+    return [{"valor": c.value, "nome": c.name.replace("_", " ").title()} for c in Categoria]
