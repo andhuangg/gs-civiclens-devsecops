@@ -5,7 +5,8 @@ RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt \
+    && pip uninstall -y pip
 
 FROM python:3.14.10-alpine3.24
 
@@ -20,7 +21,8 @@ LABEL org.opencontainers.image.title="civiclens-lite" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.revision="${APP_VERSION}"
 
-RUN addgroup -S app && adduser -S -G app -H -s /sbin/nologin app \
+RUN apk upgrade --no-cache \
+    && addgroup -S app && adduser -S -G app -H -s /sbin/nologin app \
     && pip uninstall -y pip
 
 WORKDIR /app
