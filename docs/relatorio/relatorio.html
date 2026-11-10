@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Relatório Global Solution 2026 | DevSecOps | Anderson Huang</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+  :root { --ink:#1b2430; --muted:#5b6675; --line:#d9dee5; --accent:#1f5f99; --ok:#1e7a46; --bad:#b3261e; --bg-soft:#f4f6f9; }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; color: var(--ink); font-size: 10.5pt; line-height: 1.5; margin: 0; }
+  h1 { font-size: 20pt; margin: 0 0 4mm; color: var(--accent); }
+  h2 { font-size: 14pt; color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 1.5mm; margin: 9mm 0 4mm; page-break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 5mm 0 2mm; page-break-after: avoid; }
+  p { margin: 0 0 3mm; text-align: justify; }
+  ul, ol { margin: 0 0 3mm 5mm; padding-left: 4mm; }
+  li { margin-bottom: 1mm; }
+  code { font-family: "SF Mono", Menlo, monospace; font-size: 9pt; background: var(--bg-soft); padding: 0.3mm 1.2mm; border-radius: 1mm; }
+  pre { font-family: "SF Mono", Menlo, monospace; font-size: 8pt; background: #0f1720; color: #dbe4ee; padding: 3mm 4mm; border-radius: 2mm; white-space: pre-wrap; word-break: break-word; page-break-inside: avoid; margin: 0 0 4mm; }
+  table { width: 100%; border-collapse: collapse; margin: 0 0 4mm; font-size: 9.5pt; page-break-inside: avoid; }
+  th, td { border: 1px solid var(--line); padding: 1.6mm 2.2mm; text-align: left; vertical-align: top; }
+  th { background: var(--bg-soft); }
+  .ok { color: var(--ok); font-weight: 600; }
+  .bad { color: var(--bad); font-weight: 600; }
+  figure { margin: 2mm 0 5mm; page-break-inside: avoid; text-align: center; }
+  figure img { max-width: 100%; max-height: 120mm; border: 1px solid var(--line); border-radius: 1.5mm; }
+  figcaption { font-size: 9pt; color: var(--muted); margin-top: 1.5mm; }
+  .capa { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; page-break-after: always; }
+  .capa .topo { color: var(--muted); font-size: 11pt; letter-spacing: .3px; }
+  .capa h1 { font-size: 26pt; margin-top: 50mm; line-height: 1.2; }
+  .capa .sub { font-size: 14pt; color: var(--ink); margin-bottom: 18mm; }
+  .capa table { width: 70%; font-size: 11pt; }
+  .capa .rodape { color: var(--muted); font-size: 10pt; }
+  .pagebreak { page-break-before: always; }
+  .diagrama { width: 100%; margin: 2mm 0 5mm; }
+  .nota { background: var(--bg-soft); border-left: 3px solid var(--accent); padding: 2.5mm 4mm; margin: 0 0 4mm; font-size: 9.5pt; }
+</style>
+</head>
+<body>
+
+<section class="capa">
+  <div class="topo">FIAP | Global Solution 2026 | DevOps &amp; DevSecOps Challenge</div>
+  <div>
+    <h1>Pipeline DevSecOps para o CivicLens Lite</h1>
+    <div class="sub">CitizenTech: da cidade ao campo, tecnologia para a vida cotidiana</div>
+    <table>
+      <tr><th>Participante</th><th>RM</th><th>Turma</th></tr>
+      <tr><td>Anderson Huang</td><td>565920</td><td>2TCNPZ</td></tr>
+    </table>
+  </div>
+  <div class="rodape">Modalidade individual | Ambiente: AWS (EC2 + ECR) | Novembro de 2026</div>
+</section>
+
+<h2>1. Introdução e relação com o CitizenTech</h2>
+<p>O tema CitizenTech propõe o uso de tecnologia para resolver problemas reais do cotidiano. Um dos mais visíveis nas cidades brasileiras é a manutenção urbana: buracos em vias, iluminação pública apagada, vazamentos na rede de água, descarte irregular de lixo. Hoje o cidadão costuma depender de canais lentos e pouco transparentes para registrar e acompanhar esses problemas.</p>
+<p>O projeto open source <b>CivicLens</b> (licença MIT) é uma plataforma de gerenciamento de ocorrências urbanas que endereça exatamente esse problema. Este trabalho utiliza o CivicLens como referência (Opção B do enunciado) e concentra o esforço na engenharia DevSecOps: garantir que cada alteração no software seja testada, analisada quanto a qualidade e segurança, empacotada, publicada e implantada de forma automatizada e confiável. Para um serviço público digital, isso significa entregar novas funcionalidades ao cidadão com rapidez sem abrir mão de segurança.</p>
+
+<h2>2. Objetivos e descrição da aplicação</h2>
+<h3>Objetivos</h3>
+<ul>
+  <li>Disponibilizar uma API funcional de registro e acompanhamento de ocorrências urbanas, versionada no GitHub e containerizada.</li>
+  <li>Implementar uma pipeline Jenkins declarativa disparada automaticamente a cada push, cobrindo o fluxo GitHub, Jenkins, Testes, SonarQube, Docker Build, Trivy, Registry, Deploy e Validação.</li>
+  <li>Bloquear automaticamente a entrega quando houver teste falhando, Quality Gate reprovado ou vulnerabilidade CRITICAL na imagem.</li>
+  <li>Demonstrar troubleshooting com falhas reais e controladas, e sua correção.</li>
+</ul>
+<h3>A aplicação: CivicLens Lite</h3>
+<p>O backend original do CivicLens depende de PostgreSQL com PostGIS, Redis, MinIO e módulos de IA (torch, transformers, nltk). Uma varredura do Trivy nas dependências pinadas do projeto original encontrou <b>14 vulnerabilidades CRITICAL e dezenas de HIGH</b>, em pacotes como pillow, torch, nltk e python-jose. Como o enunciado permite adaptar apenas o backend FastAPI, foi construída uma versão enxuta que preserva o modelo de domínio (categorias, severidade e fluxo de status da ocorrência) e remove as dependências que não agregam ao objetivo da disciplina.</p>
+<table>
+  <tr><th>Método</th><th>Rota</th><th>Função</th></tr>
+  <tr><td>GET</td><td><code>/health</code></td><td>Health check com a versão (tag da imagem) em execução</td></tr>
+  <tr><td>GET</td><td><code>/api/v1/ocorrencias</code></td><td>Lista ocorrências, com filtros por status e categoria</td></tr>
+  <tr><td>GET</td><td><code>/api/v1/ocorrencias/{id}</code></td><td>Detalhe de uma ocorrência</td></tr>
+  <tr><td>POST</td><td><code>/api/v1/ocorrencias</code></td><td>Registra ocorrência e gera protocolo (ex.: CL-2026-00004)</td></tr>
+  <tr><td>PATCH</td><td><code>/api/v1/ocorrencias/{id}/status</code></td><td>Atualiza status respeitando o fluxo recebida, em andamento, resolvida ou rejeitada</td></tr>
+  <tr><td>GET</td><td><code>/api/v1/estatisticas</code></td><td>Totais por status e severidade</td></tr>
+  <tr><td>GET</td><td><code>/api/v1/categorias</code></td><td>Categorias aceitas (vias, água, iluminação etc.)</td></tr>
+</table>
+<p>Stack: Python 3.14, FastAPI, Pydantic, Uvicorn e PyJWT (módulo de token). Testes com pytest (15 testes, 100% de cobertura). A imagem Docker é multi-stage, baseada em <code>python:3.14.10-alpine3.24</code>, executa com usuário não-root, sem pip em runtime, com healthcheck, e o container roda com filesystem somente leitura e sem capabilities.</p>
+<figure><img src="../evidencias/prints/01-app-swagger.jpg"><figcaption>Figura 1. API em execução na AWS (versão 14-9daf319), documentação Swagger.</figcaption></figure>
+
+<h2 class="pagebreak">3. Ambiente e arquitetura</h2>
+<p>Toda a plataforma roda em uma instância EC2 Ubuntu 24.04 (t3.large, 8 GB de RAM, 40 GB gp3 criptografado) na região us-east-1, provisionada com Terraform. Jenkins, SonarQube, PostgreSQL e a aplicação são containers Docker na mesma rede <code>devsecops</code>. O Jenkins é uma imagem própria com Docker CLI, Docker Compose, AWS CLI e Trivy, configurada inteiramente por código (Jenkins Configuration as Code), inclusive o job da pipeline.</p>
+<svg class="diagrama" viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif" font-size="13">
+  <defs><marker id="seta" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 z" fill="#1f5f99"/></marker></defs>
+  <rect x="10" y="20" width="120" height="50" rx="8" fill="#f4f6f9" stroke="#1b2430"/><text x="70" y="50" text-anchor="middle">GitHub</text>
+  <rect x="175" y="10" width="815" height="280" rx="12" fill="none" stroke="#1f5f99" stroke-dasharray="6 4"/><text x="190" y="32" fill="#1f5f99" font-weight="bold">AWS EC2 (Terraform) | rede Docker devsecops</text>
+  <line x1="130" y1="45" x2="205" y2="70" stroke="#1f5f99" stroke-width="2" marker-end="url(#seta)"/><text x="100" y="95" font-size="11" fill="#5b6675">webhook push</text>
+  <rect x="205" y="50" width="130" height="50" rx="8" fill="#e8f0f8" stroke="#1f5f99"/><text x="270" y="80" text-anchor="middle" font-weight="bold">Jenkins</text>
+  <rect x="380" y="50" width="120" height="40" rx="6" fill="#fff" stroke="#1b2430"/><text x="440" y="75" text-anchor="middle">Testes pytest</text>
+  <rect x="540" y="50" width="120" height="40" rx="6" fill="#fff" stroke="#1b2430"/><text x="600" y="75" text-anchor="middle">SonarQube</text>
+  <rect x="700" y="50" width="120" height="40" rx="6" fill="#fff8e6" stroke="#9a6a00"/><text x="760" y="75" text-anchor="middle">Quality Gate</text>
+  <rect x="855" y="50" width="120" height="40" rx="6" fill="#fff" stroke="#1b2430"/><text x="915" y="75" text-anchor="middle">Docker Build</text>
+  <rect x="855" y="150" width="120" height="40" rx="6" fill="#fff8e6" stroke="#9a6a00"/><text x="915" y="175" text-anchor="middle">Trivy</text>
+  <rect x="700" y="150" width="120" height="40" rx="6" fill="#fff" stroke="#1b2430"/><text x="760" y="175" text-anchor="middle">Amazon ECR</text>
+  <rect x="540" y="150" width="120" height="40" rx="6" fill="#fff" stroke="#1b2430"/><text x="600" y="168" text-anchor="middle">Deploy</text><text x="600" y="183" text-anchor="middle" font-size="11">Docker Compose</text>
+  <rect x="380" y="150" width="120" height="40" rx="6" fill="#e9f6ee" stroke="#1e7a46"/><text x="440" y="168" text-anchor="middle">Validação</text><text x="440" y="183" text-anchor="middle" font-size="11">smoke test HTTP</text>
+  <line x1="335" y1="72" x2="378" y2="70" stroke="#1f5f99" stroke-width="2" marker-end="url(#seta)"/>
+  <line x1="500" y1="70" x2="538" y2="70" stroke="#1f5f99" stroke-width="2" marker-end="url(#seta)"/>
+  <line x1="660" y1="70" x2="698" y2="70" stroke="#1f5f99" stroke-width="2" marker-end="url(#seta)"/>
+  <line x1="820" y1="70" x2="853" y2="70" stroke="#1f5f99" stroke-width="2" marker-end="url(#seta)"/>
+  <line x1="915" y1="90" x2="915" y2="148" stroke="#1f5f99" stroke-width="2" marker-end="url(#seta)"/>
+  <line x1="855" y1="170" x2="822" y2="170" stroke="#1f5f99" stroke-width="2" marker-end="url(#seta)"/>
+  <line x1="700" y1="170" x2="662" y2="170" stroke="#1f5f99" stroke-width="2" marker-end="url(#seta)"/>
+  <line x1="540" y1="170" x2="502" y2="170" stroke="#1f5f99" stroke-width="2" marker-end="url(#seta)"/>
+  <text x="760" y="115" text-anchor="middle" fill="#b3261e" font-size="11">reprovado: bloqueia</text>
+  <text x="915" y="215" text-anchor="middle" fill="#b3261e" font-size="11">CRITICAL: bloqueia</text>
+  <rect x="205" y="225" width="150" height="45" rx="6" fill="#f4f6f9" stroke="#1b2430"/><text x="280" y="245" text-anchor="middle" font-size="12">IAM Role (instância)</text><text x="280" y="261" text-anchor="middle" font-size="11">push no ECR sem chaves</text>
+  <rect x="380" y="225" width="150" height="45" rx="6" fill="#f4f6f9" stroke="#1b2430"/><text x="455" y="245" text-anchor="middle" font-size="12">Security Group</text><text x="455" y="261" text-anchor="middle" font-size="11">só IP do aluno e GitHub</text>
+</svg>
+<table>
+  <tr><th>Ferramenta</th><th>Versão</th><th>Papel</th></tr>
+  <tr><td>GitHub</td><td>n/a</td><td>Versionamento e gatilho via webhook de push</td></tr>
+  <tr><td>Jenkins</td><td>2.580.2 LTS (JDK 21)</td><td>Orquestração CI/CD com Jenkinsfile declarativo</td></tr>
+  <tr><td>SonarQube Community</td><td>26.11</td><td>Análise estática, cobertura e Quality Gate</td></tr>
+  <tr><td>SonarScanner CLI</td><td>8.4</td><td>Envio da análise a partir do Jenkins</td></tr>
+  <tr><td>Trivy</td><td>0.76.2</td><td>Varredura de vulnerabilidades da imagem</td></tr>
+  <tr><td>Docker / Compose</td><td>29.9 / 5.7</td><td>Build da imagem e deploy</td></tr>
+  <tr><td>Amazon ECR</td><td>n/a</td><td>Registry privado, scan on push e lifecycle de 20 imagens</td></tr>
+  <tr><td>Terraform</td><td>1.5</td><td>Provisionamento de EC2, ECR, IAM, security group e Elastic IP</td></tr>
+</table>
+<div class="nota"><b>Segurança da plataforma.</b> Nenhum segredo está no repositório: senhas do Jenkins, SonarQube e PostgreSQL são geradas aleatoriamente no bootstrap e ficam em um <code>.env</code> com permissão 600 na instância. O Jenkins publica no ECR usando a IAM Role da EC2 (sem access keys), com permissão restrita ao repositório da aplicação. O IMDSv2 é obrigatório. O security group libera Jenkins, SonarQube, aplicação e SSH apenas para o IP do aluno, e a porta do Jenkins também para as faixas de webhook publicadas pelo GitHub. O webhook do SonarQube para o Jenkins é assinado com HMAC.</div>
+
+<h2 class="pagebreak">4. Etapas implementadas</h2>
+<h3>Etapa 1. Ambiente e repositório</h3>
+<p>Repositório público <code>andhuangg/gs-civiclens-devsecops</code> com código, testes, Dockerfile, docker-compose, Jenkinsfile, infraestrutura (Terraform) e plataforma (Jenkins e SonarQube como código). O README traz instruções de execução local, reprodução da plataforma e identificação do participante.</p>
+<figure><img src="../evidencias/prints/02-github-repo.jpg"><figcaption>Figura 2. Repositório no GitHub com histórico de commits.</figcaption></figure>
+
+<h3>Etapa 2. Pipeline Jenkins</h3>
+<p>O Jenkinsfile declarativo possui os nove estágios exigidos. O disparo é automático via <code>githubPush()</code>: o GitHub envia o evento de push para <code>/github-webhook/</code> e o Jenkins inicia o build. Todos os builds do histórico foram iniciados por push ("Started by GitHub push by andhuangg"), exceto o build #2, disparado manualmente para validar a correção da etapa de Quality Gate antes do commit.</p>
+<table>
+  <tr><th>Estágio</th><th>Implementação</th><th>Bloqueia quando</th></tr>
+  <tr><td>Checkout</td><td><code>checkout scm</code>, tag <code>BUILD-SHA</code> (ex.: 14-9daf319)</td><td></td></tr>
+  <tr><td>Testes automatizados</td><td>pytest em container Python, JUnit e coverage.xml publicados</td><td>teste falha ou dependências não resolvem</td></tr>
+  <tr><td>Análise SonarQube</td><td><code>withSonarQubeEnv</code> + sonar-scanner</td><td></td></tr>
+  <tr><td>Quality Gate</td><td><code>waitForQualityGate abortPipeline: true</code></td><td>gate reprovado</td></tr>
+  <tr><td>Docker Build</td><td>build multi-stage com <code>APP_VERSION</code> = tag</td><td>erro de build</td></tr>
+  <tr><td>Trivy Scan</td><td>relatórios TXT, JSON e HTML (HIGH e CRITICAL) e gate <code>--severity CRITICAL --exit-code 1</code></td><td>existe CRITICAL</td></tr>
+  <tr><td>Publicação no ECR</td><td>login via IAM Role, push da tag versionada e <code>latest</code></td><td>falha de push</td></tr>
+  <tr><td>Deploy</td><td><code>docker compose up -d</code> com a imagem recém publicada</td><td>falha de subida</td></tr>
+  <tr><td>Validação funcional</td><td><code>scripts/smoke-test.sh</code>: health, versão exata, GET, POST (201) e estatísticas</td><td>resposta inesperada</td></tr>
+</table>
+<!--JENKINS_PRINTS-->
+
+<h3>Etapa 3. Qualidade com SonarQube</h3>
+<p>O Jenkins envia código, cobertura (coverage.xml) e resultados de teste (JUnit) ao SonarQube. Foi criado o Quality Gate <b>CivicLens Gate</b>, definido como padrão por script de bootstrap, combinando as condições "Clean as You Code" do SonarQube com condições adicionais sobre o código total:</p>
+<table>
+  <tr><th>Métrica</th><th>Reprova quando</th><th>Escopo</th></tr>
+  <tr><td>Cobertura</td><td>&lt; 80%</td><td>código total e código novo</td></tr>
+  <tr><td>Reliability, Security e Maintainability Rating</td><td>pior que A</td><td>código total</td></tr>
+  <tr><td>Linhas duplicadas</td><td>&gt; 3%</td><td>código total e código novo</td></tr>
+  <tr><td>Novos issues</td><td>&gt; 0</td><td>código novo</td></tr>
+  <tr><td>Security Hotspots revisados</td><td>&lt; 100%</td><td>código novo</td></tr>
+</table>
+<!--SONAR_PRINTS-->
+
+<h3>Etapa 4. Segurança com Trivy</h3>
+<p>Após o build, o Trivy analisa a imagem e gera três relatórios (tabela no log, JSON e HTML publicado no Jenkins), listando HIGH e CRITICAL e um resumo por severidade. Em seguida executa o gate <code>--severity CRITICAL --exit-code 1</code>, que interrompe a pipeline se existir qualquer vulnerabilidade CRITICAL. Nenhum controle foi desabilitado: não há <code>--ignore-unfixed</code>, <code>.trivyignore</code> ou exceções.</p>
+
+<h3>Etapa 5. Publicação e deploy</h3>
+<p>Cada build aprovado publica a imagem no ECR com a tag <code>NUMERO_BUILD-SHA_DO_COMMIT</code> e atualiza <code>latest</code>. O deploy usa Docker Compose com a tag exata; a validação confirma que a versão respondida pelo <code>/health</code> é a mesma do build, garantindo que o que está no ar é o que foi testado e analisado.</p>
+<pre>$ aws ecr describe-images --repository-name civiclens-lite --filter tagStatus=TAGGED
+tags          pushedAt
+2-bb0a848     2026-11-09T21:56:58     8-40e5eba     2026-11-09T22:08:54
+3-b048c8f     2026-11-09T21:58:31     9-06b62a2     2026-11-09T22:10:35
+4-e10c677     2026-11-09T22:01:36     10-1945b67    2026-11-09T22:12:33
+6-b52b93f     2026-11-09T22:05:17     11-b01d9d8    2026-11-09T22:14:05
+13-1b7887e    2026-11-09T22:18:02     latest, 14-9daf319  2026-11-09T22:19:34
+Builds 5, 7 e 12 foram bloqueados pela pipeline e por isso nao possuem imagem publicada.</pre>
+<pre>$ docker ps
+NAMES           IMAGE                                                                    STATUS
+civiclens-app   345843269906.dkr.ecr.us-east-1.amazonaws.com/civiclens-lite:14-9daf319   Up (healthy)
+jenkins         civiclens-jenkins:local                                                  Up
+sonarqube       sonarqube:26.11.0.134175-community                                       Up
+sonar-db        postgres:18.6-alpine3.24                                                 Up</pre>
+<pre>Validação funcional (build #14)
+GET /health -> {"status":"ok","service":"civiclens-lite","version":"14-9daf319"}
+OK: versão em execução confere (14-9daf319)
+GET /api/v1/ocorrencias -> 3 ocorrências
+POST /api/v1/ocorrencias -> HTTP 201, protocolo CL-2026-00004
+Validação funcional concluída com sucesso</pre>
+
+<h2 class="pagebreak">5. Resultados SonarQube e Trivy</h2>
+<table>
+  <tr><th>Indicador (build #14)</th><th>Resultado</th></tr>
+  <tr><td>Linhas de código</td><td>220</td></tr>
+  <tr><td>Testes</td><td class="ok">15 passando, 0 falhas</td></tr>
+  <tr><td>Cobertura</td><td class="ok">100%</td></tr>
+  <tr><td>Bugs / Vulnerabilidades / Code smells / Hotspots</td><td class="ok">0 / 0 / 0 / 0</td></tr>
+  <tr><td>Reliability / Security / Maintainability</td><td class="ok">A / A / A</td></tr>
+  <tr><td>Duplicação</td><td class="ok">0%</td></tr>
+  <tr><td>Quality Gate</td><td class="ok">Aprovado</td></tr>
+</table>
+<h3>Evolução das vulnerabilidades da imagem (Trivy)</h3>
+<table>
+  <tr><th>Build</th><th>CRITICAL</th><th>HIGH</th><th>MEDIUM</th><th>LOW</th><th>Situação</th></tr>
+  <tr><td>#3</td><td>0</td><td>1</td><td>2</td><td>1</td><td>Aprovado. HIGH CVE-2025-47273 (setuptools vendorizado no pip) e MEDIUM no zlib</td></tr>
+  <tr><td>#4</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="ok">Após hardening da imagem</td></tr>
+  <tr><td>#7</td><td class="bad">2</td><td>1</td><td>1</td><td>0</td><td class="bad">Bloqueado: python-jose 3.3.0</td></tr>
+  <tr><td>#8 a #14</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="ok">Após troca por PyJWT</td></tr>
+</table>
+<!--TRIVY_PRINTS-->
+
+<h2>6. Evidências da pipeline e histórico de execução</h2>
+<table>
+  <tr><th>Build</th><th>Gatilho</th><th>Resultado</th><th>Duração</th><th>Observação</th></tr>
+  <tr><td>#1</td><td>push</td><td class="bad">ABORTED</td><td>364 s</td><td>Quality Gate sem retorno do webhook (seção 7, caso 1)</td></tr>
+  <tr><td>#2</td><td>manual</td><td class="ok">SUCCESS</td><td>105 s</td><td>Validação da correção do webhook</td></tr>
+  <tr><td>#3</td><td>push</td><td class="ok">SUCCESS</td><td>72 s</td><td>Trivy reporta 1 HIGH (não bloqueante)</td></tr>
+  <tr><td>#4</td><td>push</td><td class="ok">SUCCESS</td><td>67 s</td><td>Hardening: 0 vulnerabilidades</td></tr>
+  <tr><td>#5</td><td>push</td><td class="bad">FAILURE</td><td>20 s</td><td>Bloqueio nos testes (caso 2)</td></tr>
+  <tr><td>#6</td><td>push</td><td class="ok">SUCCESS</td><td>63 s</td><td>Correção do caso 2</td></tr>
+  <tr><td>#7</td><td>push</td><td class="bad">FAILURE</td><td>74 s</td><td>Bloqueio no Trivy (caso 3)</td></tr>
+  <tr><td>#8</td><td>push</td><td class="ok">SUCCESS</td><td>75 s</td><td>Correção do caso 3</td></tr>
+  <tr><td>#9 a #11</td><td>push</td><td class="ok">SUCCESS</td><td>66 a 69 s</td><td>Novas funcionalidades (categorias e token JWT)</td></tr>
+  <tr><td>#12</td><td>push</td><td class="bad">FAILURE</td><td>51 s</td><td>Bloqueio no Quality Gate (caso 4)</td></tr>
+  <tr><td>#13</td><td>push</td><td class="ok">SUCCESS</td><td>68 s</td><td>Correção do caso 4</td></tr>
+  <tr><td>#14</td><td>push</td><td class="ok">SUCCESS</td><td>65 s</td><td>Chave JWT movida para variável de ambiente</td></tr>
+  <tr><td>#15 e #16</td><td>push</td><td class="ok">SUCCESS</td><td>64 a 65 s</td><td>Commits de documentação e evidências</td></tr>
+</table>
+<p>Logs completos de cada execução estão em <code>docs/evidencias/logs</code> no repositório.</p>
+
+<h2 class="pagebreak">7. Troubleshooting</h2>
+<p>Além da falha controlada exigida, foram documentadas falhas reais encontradas durante a implementação. Em todos os bloqueios, nenhuma imagem foi publicada no ECR e a versão em produção permaneceu a anterior, que é exatamente o comportamento esperado de uma esteira DevSecOps.</p>
+
+<h3>Caso 1 (real): Quality Gate sem resposta</h3>
+<p><b>Sintoma.</b> No build #1, o estágio Quality Gate ficou em <code>PENDING</code> até o timeout de 5 minutos, embora a análise tivesse terminado.</p>
+<p><b>Análise.</b> O log do Compute Engine do SonarQube mostrou a causa:</p>
+<pre>WARN Failed to send webhook 'jenkins' | url=http://jenkins:8080/sonarqube-webhook/ | message=Invalid URL:
+loopback, wildcard, link-local, site-local, multicast, cloud metadata addresses ... are not allowed for webhooks.</pre>
+<p>O SonarQube 26 bloqueia webhooks para IPs privados como proteção contra SSRF, e o nome <code>jenkins</code> resolve para um IP interno da rede Docker.</p>
+<p><b>Correção.</b> Em vez de desligar a proteção (<code>sonar.validateWebhooks=false</code>), o webhook passou a usar a URL pública do Jenkins, com secret HMAC validado pelo plugin, e o security group recebeu uma regra liberando a porta 8080 apenas para o próprio Elastic IP. Build #2 aprovado, com o Quality Gate respondendo em cerca de 1 segundo.</p>
+
+<h3>Caso 2 (controlado): dependência vulnerável barrada nos testes</h3>
+<p><b>Falha.</b> Commit fixando <code>h11==0.14.0</code> (CVE-2025-43859, CRITICAL, HTTP request smuggling).</p>
+<p><b>Bloqueio.</b> Build #5 falhou no estágio de testes em 20 segundos; os demais estágios foram pulados.</p>
+<pre>ERROR: Cannot install -r requirements.txt (line 2), h11==0.14.0 and httpx2 because these package versions have conflicting dependencies.
+ERROR: ResolutionImpossible</pre>
+<p><b>Análise e correção.</b> O <code>httpx2</code>, usado nos testes, exige <code>h11&gt;=0.16</code>, e o resolvedor do pip recusou a versão vulnerável antes do build da imagem. O pin foi removido e o build #6 foi aprovado.</p>
+
+<h3>Caso 3 (controlado): vulnerabilidade CRITICAL barrada pelo Trivy</h3>
+<p><b>Falha.</b> Para preparar a autenticação JWT, foi adicionada a dependência usada no CivicLens original, <code>python-jose==3.3.0</code>.</p>
+<p><b>Bloqueio.</b> Testes, SonarQube e build passaram; o Trivy bloqueou o build #7 e ECR, deploy e validação foram pulados. A aplicação no ar continuou na versão 6-b52b93f.</p>
+<pre>Total: 3 (HIGH: 1, CRITICAL: 2)
+ecdsa        CVE-2024-23342  HIGH      0.19.2   (sem correção)  python-ecdsa: vulnerable to the Minerva attack
+python-jose  CVE-2024-33663  CRITICAL  3.3.0    3.4.0           python-jose: algorithm confusion with OpenSSH ECDSA keys
+python-jose  CVE-2026-85394  CRITICAL  3.3.0    (sem correção)
+ERROR: script returned exit code 1</pre>
+<p><b>Análise.</b> Atualizar para 3.4.0 resolveria apenas uma das CRITICAL; a CVE-2026-85394 e o HIGH do <code>ecdsa</code> (dependência transitiva) não têm correção disponível.</p>
+<p><b>Correção.</b> Substituição da biblioteca por <code>PyJWT 2.15.1</code>, mantida ativamente e sem dependência do <code>ecdsa</code>. Validada com <code>trivy fs</code> antes do commit; build #8 aprovado com 0 vulnerabilidades.</p>
+
+<h3>Caso 4 (controlado): vulnerabilidade de código barrada pelo Quality Gate</h3>
+<p><b>Falha.</b> Função <code>extrair_usuario</code> criada como "atalho" para registrar em auditoria o usuário do token, decodificando o JWT com <code>options={"verify_signature": False}</code>. Os testes passavam.</p>
+<p><b>Bloqueio.</b> O SonarQube detectou a regra <code>python:S5659</code> (Vulnerability, CRITICAL) e o build #12 foi abortado no Quality Gate.</p>
+<pre>SonarQube task '61b346c7...' completed. Quality gate is 'ERROR'
+ERROR: Pipeline aborted due to quality gate failure: ERROR
+Condições reprovadas: security_rating = 4 (D), limite 1 (A) | new_violations = 1, limite 0
+python:S5659 CRITICAL VULNERABILITY app/auth.py:20 "Don't use a JWT token without verifying its signature."</pre>
+<p><b>Correção.</b> A função passou a reutilizar <code>validar_token</code>, que verifica assinatura e expiração, e foi criado um teste garantindo que um token adulterado é rejeitado. Build #13 aprovado. No build #14 a chave JWT, que estava fixa no código, passou a ser lida de variável de ambiente com tamanho mínimo de 32 caracteres.</p>
+<div class="nota"><b>Aprendizado sobre os limites das ferramentas.</b> Duas tentativas anteriores de reprovar o Quality Gate não funcionaram, e isso também foi analisado: um endpoint sem teste (build #9) não reprovou porque o SonarQube ignora condições de cobertura em mudanças com menos de 20 linhas; uma chave JWT legível escrita no código (build #11) não foi detectada porque a regra de segredos depende de entropia. Ferramentas automatizadas reduzem risco, mas não substituem revisão humana.</div>
+
+<h2 class="pagebreak">8. Conclusão e aprendizados</h2>
+<p>A pipeline entrega o fluxo completo exigido, de forma automatizada e reprodutível: cada push no GitHub resulta, em cerca de 1 minuto, em uma imagem testada, analisada, verificada quanto a vulnerabilidades, publicada com versão rastreável até o commit e implantada com validação funcional. Os três tipos de bloqueio (teste, qualidade e segurança) foram comprovados com execuções reais antes e depois da correção.</p>
+<h3>Dificuldades e soluções</h3>
+<ul>
+  <li><b>Integração SonarQube e Jenkins:</b> a proteção contra SSRF do SonarQube impediu o webhook interno; resolvido sem desligar a proteção, usando a URL pública com HMAC.</li>
+  <li><b>Vulnerabilidades herdadas:</b> o projeto de referência traz dezenas de CVEs nas dependências; a adaptação enxuta e a troca de bibliotecas eliminaram todas as vulnerabilidades da imagem final.</li>
+  <li><b>Origem de achados do Trivy:</b> o HIGH do setuptools não vinha de um pacote instalado, e sim do SBOM do pip vendorizado no venv; a solução foi remover o pip da imagem de runtime.</li>
+  <li><b>Recursos de máquina:</b> o SonarQube exige ajustes de kernel (<code>vm.max_map_count</code>) e memória; a plataforma foi para uma EC2 t3.large provisionada por Terraform.</li>
+</ul>
+<h3>Aprendizados</h3>
+<ul>
+  <li>Segurança em camadas funciona: cada falha foi barrada por uma ferramenta diferente (resolvedor de dependências, Trivy e SonarQube).</li>
+  <li>Bloquear CRITICAL e apenas reportar HIGH equilibra segurança e fluxo de entrega, desde que os HIGH sejam tratados (como no hardening do build #4).</li>
+  <li>Configuração como código (Terraform, JCasC e bootstrap) torna a plataforma reprodutível e auditável.</li>
+  <li>Identidade sem segredo (IAM Role) é mais segura que credenciais estáticas na pipeline.</li>
+</ul>
+
+<h2>9. Links</h2>
+<table>
+  <tr><th>Item</th><th>Link</th></tr>
+  <tr><td>Repositório GitHub</td><td>https://github.com/andhuangg/gs-civiclens-devsecops</td></tr>
+  <tr><td>Publicação no LinkedIn</td><td>LINK_LINKEDIN</td></tr>
+  <tr><td>Vídeo demonstrativo</td><td>LINK_VIDEO</td></tr>
+  <tr><td>Projeto de referência (MIT)</td><td>https://github.com/tejasbhor/Civiclens</td></tr>
+</table>
+
+</body>
+</html>
